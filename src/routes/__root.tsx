@@ -14,7 +14,7 @@ function RootComponent() {
     select: (state) => state.location.pathname,
   });
 
-  const noNavbarRoutes = ['/login', '/signup'];
+  const noNavbarRoutes = ['/login', '/signup', '/practice-lab/try-it'];
   const shouldShowNavbar = !noNavbarRoutes.includes(pathname);
 
   const authUserString =

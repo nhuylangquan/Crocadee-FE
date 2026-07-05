@@ -5,10 +5,14 @@
   /* ── Typography ──────────────────────────────────────────── */
 
   /* Dùng Inter cho text */
-  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-sans:
+    'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 
   /* Dùng JetBrains Mono cho Code */
-  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  --font-mono:
+    'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    'Liberation Mono', 'Courier New', monospace;
 
   /* ── Neutral ─────────────────────────────────────────────── */
   --color-neutral-50: #f2f2f2;
@@ -23,57 +27,53 @@
   --color-neutral-900: #1a1a1a;
 
   /* ── Primary ─────────────────────────────────────────────── */
-  --color-primary-100: #E6E4FF;
-  --color-primary-300: #AAA3FF;
-  --color-primary-500: #6C63FF;
-  --color-primary-700: #5F46E8;
-  --color-primary-900: #5300B7;
+  --color-primary-100: #e6e4ff;
+  --color-primary-300: #aaa3ff;
+  --color-primary-500: #6c63ff;
+  --color-primary-700: #5f46e8;
+  --color-primary-900: #5300b7;
 
   /* ── Secondary ───────────────────────────────────────────── */
-  --color-secondary-100: #FFF0E5;
-  --color-secondary-300: #FFC48A;
-  --color-secondary-500: #FF8A1F;
-  --color-secondary-700: #D96A00;
-  --color-secondary-900: #8F4300;
+  --color-secondary-100: #fff0e5;
+  --color-secondary-300: #ffc48a;
+  --color-secondary-500: #ff8a1f;
+  --color-secondary-700: #d96a00;
+  --color-secondary-900: #8f4300;
 
   /* ── Tertiary ────────────────────────────────────────────── */
-  --color-tertiary-100: #DFFFF8;
-  --color-tertiary-300: #8AF2DE;
-  --color-tertiary-500: #24D3B5;
-  --color-tertiary-700: #0FA58C;
-  --color-tertiary-900: #056B5C;
+  --color-tertiary-100: #dffff8;
+  --color-tertiary-300: #8af2de;
+  --color-tertiary-500: #24d3b5;
+  --color-tertiary-700: #0fa58c;
+  --color-tertiary-900: #056b5c;
 
   /* ── Success ─────────────────────────────────────────────── */
-  --color-success-100: #7BCFA9;
-  --color-success-300: #33B679;
-  --color-success-500: #0F9D58;
+  --color-success-100: #7bcfa9;
+  --color-success-300: #33b679;
+  --color-success-500: #0f9d58;
   --color-success-700: #008444;
-  --color-success-900: #005B2E;
+  --color-success-900: #005b2e;
 
   /* ── Warning ─────────────────────────────────────────────── */
-  --color-warning-100: #FFE168;
-  --color-warning-300: #FBCB43;
-  --color-warning-500: #F4B400;
-  --color-warning-700: #D49C00;
-  --color-warning-900: #A17700;
+  --color-warning-100: #ffe168;
+  --color-warning-300: #fbcb43;
+  --color-warning-500: #f4b400;
+  --color-warning-700: #d49c00;
+  --color-warning-900: #a17700;
 
   /* ── Danger ──────────────────────────────────────────────── */
-  --color-danger-100: #FFE8E8;
-  --color-danger-300: #FFA8A8;
-  --color-danger-500: #F03D3E;
-  --color-danger-700: #C92A2A;
-  --color-danger-900: #7A1011;
+  --color-danger-100: #ffe8e8;
+  --color-danger-300: #ffa8a8;
+  --color-danger-500: #f03d3e;
+  --color-danger-700: #c92a2a;
+  --color-danger-900: #7a1011;
 
   /* ── Shades ──────────────────────────────────────────────── */
   --color-shade-white: #ffffff;
   --color-shade-black: #000000;
 
   /* ── Background-Color ──────────────────────────────────────────────── */
-  --color-bg-default: #F2F1FF;
-
-
-
-
+  --color-bg-default: #f2f1ff;
 }
 
 @layer base {

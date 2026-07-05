@@ -16,11 +16,11 @@ export default tseslint.config(
       ...tseslint.configs.recommendedTypeChecked,
       ...tseslint.configs.strictTypeChecked,
       ...tseslint.configs.stylisticTypeChecked,
-      
+
       reactX.configs['recommended-typescript'],
       reactDom.configs.recommended,
-      
-      eslintPluginPrettierRecommended
+
+      eslintPluginPrettierRecommended,
     ],
     languageOptions: {
       ecmaVersion: 2020,
@@ -40,7 +40,7 @@ export default tseslint.config(
         'warn',
         { allowConstantExport: true },
       ],
-      'prettier/prettier': 'error'
+      'prettier/prettier': 'error',
     },
   }
 );

@@ -4,17 +4,17 @@ Dự án Frontend cho nền tảng CodeBite.
 
 ## Tech Stack
 
-| Technology | Purpose |
-| :--- | :--- |
-| **React 19** | UI library |
-| **TypeScript** | Type safety |
-| **Vite** | Build tool & dev server |
-| **Tailwind CSS v4** | Utility-first styling |
-| **TanStack Router** | Type-safe client-side routing |
-| **Zustand** | State management |
-| **Axios** | HTTP client |
-| **ESLint** | Code linting |
-| **Prettier** | Code formatting |
+| Technology              | Purpose                                 |
+| :---------------------- | :-------------------------------------- |
+| **React 19**            | UI library                              |
+| **TypeScript**          | Type safety                             |
+| **Vite**                | Build tool & dev server                 |
+| **Tailwind CSS v4**     | Utility-first styling                   |
+| **TanStack Router**     | Type-safe client-side routing           |
+| **Zustand**             | State management                        |
+| **Axios**               | HTTP client                             |
+| **ESLint**              | Code linting                            |
+| **Prettier**            | Code formatting                         |
 | **Husky + lint-staged** | Pre-commit hooks & conventional commits |
 
 ## Setup
@@ -37,3 +37,4 @@ Kiểm tra Commit Message — Phải tuân thủ chuẩn Conventional Commits (v
 Kiểm tra Branch Name — Nhanh làm việc của bạn phải tuân thủ quy tắc dưới đây.
 
 Quy tắc đặt tên nhánh (Branch Naming Convention):
+```

@@ -25,7 +25,7 @@ const navItems: {
   disabled?: boolean;
 }[] = [
   { id: 'home', label: 'Home', href: '/home' },
-  { id: 'practice-lab', label: 'Practice Lab', href: '#', disabled: true },
+  { id: 'practice-lab', label: 'Practice Lab', href: '/practice-lab' },
   { id: 'challenge', label: 'Challenge', href: '#', disabled: true },
   { id: 'coderush', label: 'CodeRush', href: '/coderush' },
 ];

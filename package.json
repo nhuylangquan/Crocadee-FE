@@ -11,6 +11,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@monaco-editor/react": "^4.7.0",
     "@tailwindcss/vite": "^4.2.2",
     "@tanstack/react-router": "^1.168.23",
     "axios": "^1.15.1",

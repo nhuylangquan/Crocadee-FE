@@ -1,18 +1,26 @@
 export function CodePreview() {
   return (
-    <div className="overflow-hidden rounded-xl bg-[#1E1E2E] shadow-lg">
-      {/* Window Controls + File Tab */}
-      <div className="flex items-center gap-3 border-b border-white/5 bg-[#181825] px-4 py-2.5">
-        <div className="flex items-center gap-1.5">
-          <div className="h-3 w-3 rounded-full bg-[#F38BA8]" />
-          <div className="h-3 w-3 rounded-full bg-[#F9E2AF]" />
-          <div className="h-3 w-3 rounded-full bg-[#A6E3A1]" />
+    <div className="relative overflow-hidden rounded-2xl bg-[#171721] shadow-xl">
+      {/* File Tab */}
+      <div className="flex items-center justify-between border-b border-white/5 bg-[#171721] px-4 py-3">
+        <div className="flex items-center gap-2 font-mono text-xs text-white/40">
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+          </svg>
+          hello_world.cpp
         </div>
-        <span className="font-mono text-xs text-white/40">hello_world.cpp</span>
       </div>
 
       {/* Code Content */}
-      <div className="overflow-x-auto p-5 font-mono text-[13px] leading-6">
+      <div className="p-6 font-mono text-[14px] leading-7">
         <pre className="text-white/90">
           <code>
             <span className="text-[#CBA6F7]">#include</span>{' '}
@@ -22,6 +30,11 @@ export function CodePreview() {
             <span className="text-[#CBA6F7]">int</span>{' '}
             <span className="text-[#89B4FA]">main</span>
             <span className="text-white/60">() {'{'}</span>
+            {'\n'}
+            {'    '}
+            <span className="text-white/40">
+              {'// This is your first C++ program'}
+            </span>
             {'\n'}
             {'    '}
             <span className="text-[#F5C2E7]">std</span>
@@ -35,6 +48,7 @@ export function CodePreview() {
             <span className="text-[#89B4FA]">endl</span>
             <span className="text-white/60">;</span>
             {'\n'}
+            {'\n'}
             {'    '}
             <span className="text-[#CBA6F7]">return</span>{' '}
             <span className="text-[#FAB387]">0</span>
@@ -43,6 +57,38 @@ export function CodePreview() {
             <span className="text-white/60">{'}'}</span>
           </code>
         </pre>
+      </div>
+
+      {/* Console Output Footer */}
+      <div className="border-t border-white/5 bg-[#1C1C28] p-5 pt-4">
+        <div className="flex items-end justify-between">
+          <div>
+            <p className="mb-1 text-[10px] font-bold uppercase tracking-widest text-white/30">
+              CONSOLE OUTPUT
+            </p>
+            <p className="font-mono text-sm text-[#A6E3A1]">
+              &gt; Hello, World!
+            </p>
+            <p className="mt-1 font-mono text-xs text-white/30">
+              Program exited with code 0
+            </p>
+          </div>
+          <a
+            href="/practice-lab/try-it"
+            className="inline-flex items-center gap-1.5 rounded-full bg-[#00D09E] px-5 py-2 text-sm font-bold text-white transition-all hover:bg-[#00b085] active:scale-[0.97]"
+          >
+            Try it
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+              <path
+                d="M6 4L10 8L6 12"
+                stroke="white"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </a>
+        </div>
       </div>
     </div>
   );

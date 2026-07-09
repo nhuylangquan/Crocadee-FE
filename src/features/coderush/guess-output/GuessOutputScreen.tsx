@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from '@tanstack/react-router';
 import { Button } from '../../../components/ui/Button';
 import type { GuessOutputQuestion } from './guessOutputData';
-import { DEMO_QUESTIONS, DEFAULT_CODE_SNIPPET } from './guessOutputData';
+import { DEMO_QUESTIONS } from './guessOutputData';
 
 type GamePhase = 'playing' | 'correct' | 'incorrect' | 'finished';
 
@@ -39,6 +39,11 @@ export function GuessOutputScreen({
   const totalQuestions = Math.min(questions.length, TOTAL_QUESTIONS);
   const question = questions[currentQ] ?? questions[0];
   const isLastQuestion = currentQ >= totalQuestions - 1;
+
+  /* ── Extract code from question text ────────────────── */
+  const questionParts = question.q.split('\n');
+  const questionHeading = questionParts[0] ?? '';
+  const questionCode = questionParts.slice(1).join('\n').trim();
 
   /* ── Timer ──────────────────────────────────────────── */
   const clearTimer = useCallback(() => {
@@ -263,7 +268,7 @@ export function GuessOutputScreen({
       <div className="flex min-h-0 flex-1 gap-8 overflow-y-auto px-6 py-6 md:px-71">
         <div className="flex min-w-0 flex-1 flex-col">
           <h2 className="text-[28px] leading-[1.2] font-extrabold text-[#151C27]">
-            {question.q}
+            {questionHeading}
           </h2>
 
           <div className="mt-4.5 overflow-hidden rounded-[10px] bg-[#1E1E1E] p-5">
@@ -273,7 +278,7 @@ export function GuessOutputScreen({
               </span>
             </div>
             <pre className="overflow-x-auto whitespace-pre-wrap font-mono text-[15px] leading-7 text-[#DCE2F3]">
-              {DEFAULT_CODE_SNIPPET}
+              {questionCode || 'No code snippet available'}
             </pre>
           </div>
 
@@ -377,14 +382,7 @@ export function GuessOutputScreen({
                     Explanation
                   </p>
                   <div className="rounded-[10px] bg-[#F6F3F2] p-4 text-sm leading-6 text-[#4A4454]">
-                    The correct answer is{' '}
-                    <strong>{Object.values(question.o)[question.c]}</strong>.
-                    When you slice a list with{' '}
-                    <code className="rounded bg-[#E8E3E2] px-1 font-mono text-xs">
-                      [start:end]
-                    </code>
-                    , the start index is included but the end index is
-                    exclusive.
+                    {question.ex ?? 'No explanation available.'}
                   </div>
                 </div>
 
@@ -394,19 +392,8 @@ export function GuessOutputScreen({
                   </p>
                   <div className="overflow-hidden rounded-lg bg-[#1E1E1E] p-3">
                     <pre className="overflow-x-auto font-mono text-xs leading-5 text-[#DCE2F3]">
-                      {DEFAULT_CODE_SNIPPET}
+                      {questionCode || 'No code snippet available'}
                     </pre>
-                  </div>
-                </div>
-
-                <div>
-                  <p className="mb-1 text-[11px] font-bold uppercase tracking-wider text-[#4A4454]">
-                    Slice Syntax
-                  </p>
-                  <div className="rounded-lg border border-[#CCC3D7] bg-[#F0EDFF] px-4 py-2.5">
-                    <code className="font-mono text-sm text-[#4A4454]">
-                      list[start:end] # end is exclusive
-                    </code>
                   </div>
                 </div>
               </div>
@@ -421,7 +408,7 @@ export function GuessOutputScreen({
           <Button
             variant="choice"
             onClick={handleSkip}
-            className="!h-11 !w-auto rounded-[10px] border border-[#CCC3D7] bg-white px-5 py-2.5 text-sm font-medium text-[#4A4454] hover:bg-[#F8F4FF]"
+            className="h-11! w-auto! rounded-[10px] border border-[#CCC3D7] bg-white px-5 py-2.5 text-sm font-medium text-[#4A4454] hover:bg-[#F8F4FF]"
           >
             Skip {'\u2192'}
           </Button>
@@ -429,7 +416,7 @@ export function GuessOutputScreen({
           <Button
             variant="primary"
             onClick={handleNext}
-            className="!h-11 !w-auto px-6"
+            className="h-11! w-auto! px-6"
           >
             {isLastQuestion ? 'See Results' : 'Next'}
           </Button>

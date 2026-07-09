@@ -1,16 +1,18 @@
 import md5 from 'md5';
 
 /**
- * Question shape from the API (hardcoded demo for now).
+ * Question shape from the API.
  *
- *   q: question text
- *   o: options { a, b, c, d }
- *   c: 0-based index of the correct answer
+ *   q:  question text (may include code after a newline)
+ *   o:  options { a, b, c, d }
+ *   c:  0-based index of the correct answer
+ *   ex: explanation shown when the user answers incorrectly (optional)
  */
 export interface GuessOutputQuestion {
   q: string;
   o: { a: string; b: string; c: string; d: string };
   c: 0 | 1 | 2 | 3;
+  ex?: string;
 }
 
 /**

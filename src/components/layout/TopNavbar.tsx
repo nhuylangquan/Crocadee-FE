@@ -1,12 +1,14 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate, useRouter } from '@tanstack/react-router';
 import { Button } from '../../components/button';
+import { useTheme } from '../../lib/theme';
 
 import codebiteLogoUrl from '../../assets/logo/Codebite logo.svg';
 import expBarIconUrl from '../../assets/icons/navbar-exp-bar.svg';
 import notificationIconUrl from '../../assets/icons/navbar-notification.svg';
 import profileIconUrl from '../../assets/icons/navbar-profile.svg';
 import themeIconUrl from '../../assets/icons/navbar-theme.svg';
+import darkModeIconUrl from '../../assets/icons/navbar-darkmode.svg';
 import profileModeIconUrl from '../../assets/icons/navbar-profileMode.svg';
 import logoutIconUrl from '../../assets/icons/navbar-logout.svg';
 
@@ -169,8 +171,10 @@ export function TopNavbar({
   isLoggedIn = false,
   username,
 }: TopNavbarProps) {
+  const { theme, toggleTheme } = useTheme();
+
   return (
-    <header className="flex h-14 items-center justify-between bg-primary-100 px-6">
+    <header className="flex h-14 items-center justify-between bg-primary-100 px-6 dark:bg-[#1e1a4a]">
       <div className="flex items-center gap-8">
         <a href="/" className="flex items-center justify-center">
           <img
@@ -188,10 +192,17 @@ export function TopNavbar({
       <div className="flex items-center gap-4">
         <button
           type="button"
-          aria-label="Light mode"
-          className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full p-2 text-neutral-700 transition hover:bg-primary-700/10"
+          onClick={toggleTheme}
+          aria-label={
+            theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'
+          }
+          className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full p-2 text-neutral-700 transition hover:bg-primary-700/10 dark:text-neutral-300"
         >
-          <img src={themeIconUrl} alt="Theme" className="h-6 w-6" />
+          <img
+            src={theme === 'light' ? themeIconUrl : darkModeIconUrl}
+            alt="Theme"
+            className="h-6 w-6"
+          />
         </button>
 
         <button

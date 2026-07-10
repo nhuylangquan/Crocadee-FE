@@ -18,20 +18,20 @@ function CoderushRoute() {
   // Use min-h-0 flex-1 to fill remaining space after the navbar in __root
   if (isOnChildRoute) {
     return (
-      <div className="flex min-h-0 flex-1 flex-col bg-[#F9F9FF] text-neutral-900">
+      <div className="flex min-h-0 flex-1 flex-col bg-bg-default text-neutral-900">
         <Outlet />
       </div>
     );
   }
 
   return (
-    <main className="flex h-dvh flex-col overflow-hidden bg-[#F9F9FF] text-neutral-900">
+    <main className="flex h-dvh flex-col overflow-hidden bg-bg-default text-neutral-900">
       <section className="mx-auto flex min-h-0 w-full max-w-275 flex-1 flex-col px-4 py-2.5 sm:px-6 sm:py-3">
         <div className="shrink-0">
           <h1 className="text-[clamp(2rem,4.8vh,3rem)] leading-none font-extrabold text-neutral-900">
             CodeRush
           </h1>
-          <p className="mt-1 max-w-3xl text-sm leading-5 text-[#4A4454] sm:text-base sm:leading-6">
+          <p className="mt-1 max-w-3xl text-sm leading-5 text-neutral-700 sm:text-base sm:leading-6">
             Sharpen your skills with bite-sized mini-games. Earn XP, collect
             badges, and climb the leaderboard.
           </p>

@@ -1,20 +1,13 @@
+import fileIconUrl from '../../../assets/icons/practice-file.svg';
+import tryIconUrl from '../../../assets/icons/practice-try.svg';
+
 export function CodePreview() {
   return (
     <div className="relative overflow-hidden rounded-2xl bg-[#171721] shadow-xl">
       {/* File Tab */}
       <div className="flex items-center justify-between border-b border-white/5 bg-[#171721] px-4 py-3">
         <div className="flex items-center gap-2 font-mono text-xs text-white/40">
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-          >
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-            <polyline points="14 2 14 8 20 8"></polyline>
-          </svg>
+          <img src={fileIconUrl} alt="" className="h-3.5 w-3.5" />
           hello_world.cpp
         </div>
       </div>
@@ -78,15 +71,7 @@ export function CodePreview() {
             className="inline-flex items-center gap-1.5 rounded-full bg-[#00D09E] px-5 py-2 text-sm font-bold text-white transition-all hover:bg-[#00b085] active:scale-[0.97]"
           >
             Try it
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-              <path
-                d="M6 4L10 8L6 12"
-                stroke="white"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            <img src={tryIconUrl} alt="" className="h-3.5 w-3.5" />
           </a>
         </div>
       </div>

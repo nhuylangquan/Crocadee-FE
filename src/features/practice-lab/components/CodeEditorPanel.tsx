@@ -1,4 +1,5 @@
 import Editor from '@monaco-editor/react';
+import chevronIconUrl from '../../../assets/icons/practice-chevron-left.svg';
 
 interface CodeEditorPanelProps {
   code: string;
@@ -11,22 +12,7 @@ export function CodeEditorPanel({ code, onChange }: CodeEditorPanelProps) {
       {/* File Tab Bar */}
       <div className="flex shrink-0 items-center border-b border-white/5 bg-[#181825] px-4 py-2">
         <div className="flex items-center gap-2 rounded-md bg-[#1E1E2E] px-3 py-1">
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-            <path
-              d="M4 3L1.5 6L4 9"
-              stroke="#89B4FA"
-              strokeWidth="1.2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M8 3L10.5 6L8 9"
-              stroke="#89B4FA"
-              strokeWidth="1.2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          <img src={chevronIconUrl} alt="" className="h-3 w-3" />
           <span className="font-mono text-xs text-white/60">main.cpp</span>
         </div>
       </div>

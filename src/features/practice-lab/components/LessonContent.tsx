@@ -1,4 +1,5 @@
 import { CodePreview } from './CodePreview';
+import chevronRightUrl from '../../../assets/icons/practice-chevron-right.svg';
 
 export function LessonContent() {
   return (
@@ -35,7 +36,7 @@ export function LessonContent() {
         {/* Info Cards */}
         <div className="mb-10 grid grid-cols-1 gap-6 md:grid-cols-2">
           {/* Card: Why C++? */}
-          <div className="rounded-2xl border border-white/50 bg-white p-6 shadow-sm">
+          <div className="rounded-2xl border border-neutral-100 bg-shade-white p-6 shadow-sm">
             <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-purple-50">
               <span className="text-xl text-[#6C63FF]">💪</span>
             </div>
@@ -50,7 +51,7 @@ export function LessonContent() {
           </div>
 
           {/* Card: Close to the Metal */}
-          <div className="rounded-2xl border border-white/50 bg-white p-6 shadow-sm">
+          <div className="rounded-2xl border border-neutral-100 bg-shade-white p-6 shadow-sm">
             <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-orange-50">
               <span className="text-xl text-orange-500">⚙️</span>
             </div>
@@ -76,15 +77,7 @@ export function LessonContent() {
             className="inline-flex items-center gap-2 rounded-full bg-[#6C63FF] px-8 py-3.5 text-[15px] font-bold text-white shadow-md transition-all hover:bg-[#5a52d5] active:scale-[0.98]"
           >
             C++ Basics
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path
-                d="M6 4L10 8L6 12"
-                stroke="white"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            <img src={chevronRightUrl} alt="" className="h-4 w-4" />
           </a>
         </div>
       </div>

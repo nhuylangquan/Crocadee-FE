@@ -118,7 +118,7 @@ export function MiniGameCard({ game, isFeatured = false }: MiniGameCardProps) {
 
   return (
     <article
-      className={`relative overflow-hidden rounded-[11px] border border-[#E2E8F8] bg-[#F9F9FF] shadow-[0px_4px_20px_rgba(15,23,42,0.05)] ${cardHeightClass} ${cardPaddingClass}`}
+      className={`relative overflow-hidden rounded-[11px] border border-[#E2E8F8] bg-shade-white shadow-[0px_4px_20px_rgba(15,23,42,0.05)] ${cardHeightClass} ${cardPaddingClass}`}
     >
       <span
         className="pointer-events-none absolute -top-17.5 -right-17.5 h-71 w-71 rounded-full"
@@ -149,11 +149,11 @@ export function MiniGameCard({ game, isFeatured = false }: MiniGameCardProps) {
         </div>
 
         <div className={introSpacingClass}>
-          <h3 className={`${titleClass} font-bold text-[#151C27]`}>
+          <h3 className={`${titleClass} font-bold text-neutral-900`}>
             {game.title}
           </h3>
           <p
-            className={`${subtitleClass} max-w-127.75 whitespace-pre-line text-[#4A4455]`}
+            className={`${subtitleClass} max-w-127.75 whitespace-pre-line text-neutral-700`}
           >
             {game.subtitle}
           </p>
@@ -226,7 +226,7 @@ export function MiniGameCard({ game, isFeatured = false }: MiniGameCardProps) {
         </div>
 
         {game.id === 'rearrange-code' && game.fragmentOptions?.length ? (
-          <div className={`rounded-[7px] bg-[#F9F9FF] ${optionPanelClass}`}>
+          <div className={`rounded-[7px] bg-shade-white ${optionPanelClass}`}>
             <div className="flex flex-wrap gap-3">
               {game.fragmentOptions.map((fragment) => (
                 <Button
@@ -242,7 +242,7 @@ export function MiniGameCard({ game, isFeatured = false }: MiniGameCardProps) {
         ) : null}
 
         {game.template === 'guess-output' && game.choiceOptions?.length ? (
-          <div className={`rounded-[7px] bg-[#F9F9FF] ${optionPanelClass}`}>
+          <div className={`rounded-[7px] bg-shade-white ${optionPanelClass}`}>
             <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
               {game.choiceOptions.map((option) => (
                 <Button

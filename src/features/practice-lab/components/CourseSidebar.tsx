@@ -22,7 +22,7 @@ export function CourseSidebar() {
   const progress = 1;
 
   return (
-    <aside className="flex h-full w-[260px] shrink-0 flex-col border-r border-neutral-100 bg-white px-5 py-6 shadow-sm">
+    <aside className="flex h-full w-65 shrink-0 flex-col border-r border-neutral-100 bg-shade-white px-5 py-6 shadow-sm">
       {/* Title */}
       <h2 className="mb-6 text-center text-xl font-bold tracking-tight text-[#6C63FF]">
         C++ Mastery
@@ -77,7 +77,7 @@ export function CourseSidebar() {
               disabled
               className="flex items-center gap-4 rounded-xl px-3 py-2.5 text-left opacity-60 transition-all"
             >
-              <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-neutral-300 bg-white">
+              <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-neutral-300 bg-shade-white">
                 <span className="text-xs font-medium text-neutral-400">
                   {topic.module}
                 </span>

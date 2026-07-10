@@ -3,7 +3,7 @@ import { LessonContent } from '../components/LessonContent';
 
 export function PracticeLabPage() {
   return (
-    <div className="flex h-full w-full bg-[#F7F6FF]">
+    <div className="flex h-full w-full bg-bg-default">
       {/* Left Sidebar */}
       <CourseSidebar />
 

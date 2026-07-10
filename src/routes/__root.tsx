@@ -34,7 +34,7 @@ function RootComponent() {
   }
 
   return (
-    <div className="flex h-dvh flex-col bg-primary-100 text-neutral-900">
+    <div className="flex h-dvh flex-col bg-bg-default text-neutral-900">
       {shouldShowNavbar && (
         <TopNavbar
           activeItem={

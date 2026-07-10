@@ -1,4 +1,5 @@
 import codebiteLogoUrl from '../../../assets/logo/Codebite logo.svg';
+import playIconUrl from '../../../assets/icons/practice-play.svg';
 
 interface EditorHeaderProps {
   onRun?: () => void;
@@ -37,11 +38,7 @@ export function EditorHeader({ onRun, onSave, isRunning }: EditorHeaderProps) {
               : 'bg-danger-500 hover:bg-danger-700'
           }`}
         >
-          {!isRunning && (
-            <svg width="10" height="12" viewBox="0 0 10 12" fill="none">
-              <path d="M1 1L9 6L1 11V1Z" fill="white" />
-            </svg>
-          )}
+          {!isRunning && <img src={playIconUrl} alt="" className="h-3 w-3" />}
           {isRunning ? 'Running...' : 'Run'}
         </button>
         <button

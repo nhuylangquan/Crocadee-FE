@@ -1,6 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@700&display=swap');
 @import 'tailwindcss';
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   /* ── Typography ──────────────────────────────────────────── */
 
@@ -79,5 +81,27 @@
 @layer base {
   body {
     background-color: var(--color-bg-default);
+    transition: background-color 0.2s ease, color 0.2s ease;
   }
+}
+
+/* ── Dark mode overrides ──────────────────────────────────── */
+.dark {
+  --color-bg-default: #0f0e17;
+  --color-shade-white: #1a1a2e;
+  --color-shade-black: #f0f0f5;
+  --color-primary-100: #1e1a4a;
+  --color-primary-300: #4a3f8a;
+  --color-primary-700: #8a82ff;
+  --color-primary-900: #b8b3ff;
+  --color-neutral-50: #1a1a2e;
+  --color-neutral-100: #16213e;
+  --color-neutral-200: #1a1a2e;
+  --color-neutral-300: #2d2d44;
+  --color-neutral-400: #4a4a6a;
+  --color-neutral-500: #6e6e8a;
+  --color-neutral-600: #9292aa;
+  --color-neutral-700: #b6b6c8;
+  --color-neutral-800: #dadae6;
+  --color-neutral-900: #f0f0f5;
 }

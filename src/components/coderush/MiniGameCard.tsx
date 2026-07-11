@@ -7,6 +7,7 @@ import type {
   MiniGameTemplate,
 } from '../../features/coderush/data/miniGames';
 import { generateGuessOutputSeed } from '../../features/coderush/guess-output/guessOutputData';
+import { generateRearrangeSeed } from '../../features/coderush/rearrange/rearrangeData';
 import { Button } from '../ui/Button';
 
 interface MiniGameCardProps {
@@ -280,6 +281,12 @@ export function MiniGameCard({ game, isFeatured = false }: MiniGameCardProps) {
                 const seed = generateGuessOutputSeed();
                 void navigate({
                   to: '/coderush/guess_output/$seed',
+                  params: { seed },
+                });
+              } else if (game.id === 'rearrange-code') {
+                const seed = generateRearrangeSeed();
+                void navigate({
+                  to: '/coderush/rearrange/$seed',
                   params: { seed },
                 });
               }

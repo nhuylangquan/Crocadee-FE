@@ -15,7 +15,7 @@ export interface GuessOutputApiResponse {
 export async function fetchGuessOutputQuestions(
   seed: string
 ): Promise<GuessOutputQuestion[]> {
-  return (await apiClient.get('/questions', {
+  return (await apiClient.get('/guess_output', {
     params: { seed },
   })) as unknown as GuessOutputQuestion[];
 }

@@ -35,6 +35,11 @@ export function GuessOutputScreen({
   const [timeLeft, setTimeLeft] = useState(TIMER_TOTAL);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const expiryRef = useRef<number>(0);
+  const startTimeRef = useRef(0);
+  const [correctCount, setCorrectCount] = useState(0);
+  const [answeredCount, setAnsweredCount] = useState(0);
+  const [timeTaken, setTimeTaken] = useState('0:00');
+  const [accuracy, setAccuracy] = useState(0);
 
   const totalQuestions = Math.min(questions.length, TOTAL_QUESTIONS);
   const question = questions[currentQ] ?? questions[0];
@@ -59,6 +64,11 @@ export function GuessOutputScreen({
       return;
     }
 
+    /* Record the very first time we enter 'playing' mode as session start */
+    if (startTimeRef.current === 0) {
+      startTimeRef.current = Date.now();
+    }
+
     expiryRef.current = Date.now() + TIMER_TOTAL * 1000;
 
     timerRef.current = setInterval(() => {
@@ -76,6 +86,28 @@ export function GuessOutputScreen({
     return clearTimer;
   }, [phase, currentQ, clearTimer]);
 
+  /* ── Calculate final stats when game finishes ───────── */
+  useEffect(() => {
+    if (phase !== 'finished') return;
+
+    const elapsedMs = Date.now() - startTimeRef.current;
+    const totalSecs = Math.floor(elapsedMs / 1000);
+    const mins = Math.floor(totalSecs / 60);
+    const secs = totalSecs % 60;
+    const newAccuracy =
+      answeredCount > 0 ? Math.round((correctCount / answeredCount) * 100) : 0;
+
+    // Defer state updates to avoid synchronous setState calls inside effect
+    const t = setTimeout(() => {
+      setTimeTaken(`${String(mins)}:${secs.toString().padStart(2, '0')}`);
+      setAccuracy(newAccuracy);
+    }, 0);
+
+    return () => {
+      clearTimeout(t);
+    };
+  }, [phase, correctCount, answeredCount]);
+
   /* ── Select an answer ───────────────────────────────── */
   const handleSelect = (idx: number) => {
     if (phase !== 'playing') return;
@@ -83,10 +115,12 @@ export function GuessOutputScreen({
     clearTimer();
 
     const isCorrect = idx === question.c;
+    setAnsweredCount((c) => c + 1);
     if (isCorrect) {
       const newCombo = combo + 1;
       setCombo(newCombo);
       setScore((s) => s + 150 * newCombo);
+      setCorrectCount((c) => c + 1);
       setPhase('correct');
     } else {
       setCombo(0);
@@ -110,6 +144,7 @@ export function GuessOutputScreen({
     clearTimer();
     setCombo(0);
     setSelectedIdx(null);
+    setAnsweredCount((c) => c + 1);
     setPhase('incorrect');
   };
 
@@ -157,10 +192,6 @@ export function GuessOutputScreen({
      RENDER: Completion Popup — Figma "S3 · Completion Popup"
      ═══════════════════════════════════════════════════════ */
   if (phase === 'finished') {
-    // Calculate time taken (mock — for demo we show a placeholder)
-    const timeTaken = '1:42';
-
-    // Calculate XP earned from the session
     const xpEarned = score;
 
     return (
@@ -252,24 +283,20 @@ export function GuessOutputScreen({
 
             {/* Content / Stats Area */}
             <div className="px-[28.33px] pt-0 pb-[28.33px]">
-              {/* Main Stats Grid (3 columns) */}
+              {/* Main Stats Grid (3 columns) — includes XP Earned inside the grid */}
               <div className="mt-[28.33px] grid grid-cols-3 gap-3">
                 {/* Time Taken */}
                 <div className="flex flex-col items-center rounded-[10.625px] border border-[#E5E2E14D] bg-[#F0EDED] px-[14.17px] pt-[14.17px] pb-[14.17px]">
                   <svg
-                    width="15.94"
-                    height="18.59"
-                    viewBox="0 0 16 19"
+                    width="18"
+                    height="21"
+                    viewBox="0 0 18 21"
                     fill="none"
-                    aria-hidden="true"
-                    className="mb-1"
+                    xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      d="M8 4.5V9.5L11 11M8 0.5C6.14348 0.5 4.36301 1.2375 3.05025 2.55025C1.7375 3.86301 1 5.64348 1 7.5C1 9.35652 1.7375 11.137 3.05025 12.4497C4.36301 13.7625 6.14348 14.5 8 14.5C9.85652 14.5 11.637 13.7625 12.9497 12.4497C14.2625 11.137 15 9.35652 15 7.5C15 5.64348 14.2625 3.86301 12.9497 2.55025C11.637 1.2375 9.85652 0.5 8 0.5Z"
-                      stroke="#7238D5"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
+                      d="M6 2V0H12V2H6ZM8 13H10V7H8V13ZM9 21C7.76667 21 6.60417 20.7625 5.5125 20.2875C4.42083 19.8125 3.46667 19.1667 2.65 18.35C1.83333 17.5333 1.1875 16.5792 0.7125 15.4875C0.2375 14.3958 0 13.2333 0 12C0 10.7667 0.2375 9.60417 0.7125 8.5125C1.1875 7.42083 1.83333 6.46667 2.65 5.65C3.46667 4.83333 4.42083 4.1875 5.5125 3.7125C6.60417 3.2375 7.76667 3 9 3C10.0333 3 11.025 3.16667 11.975 3.5C12.925 3.83333 13.8167 4.31667 14.65 4.95L16.05 3.55L17.45 4.95L16.05 6.35C16.6833 7.18333 17.1667 8.075 17.5 9.025C17.8333 9.975 18 10.9667 18 12C18 13.2333 17.7625 14.3958 17.2875 15.4875C16.8125 16.5792 16.1667 17.5333 15.35 18.35C14.5333 19.1667 13.5792 19.8125 12.4875 20.2875C11.3958 20.7625 10.2333 21 9 21ZM9 19C10.9333 19 12.5833 18.3167 13.95 16.95C15.3167 15.5833 16 13.9333 16 12C16 10.0667 15.3167 8.41667 13.95 7.05C12.5833 5.68333 10.9333 5 9 5C7.06667 5 5.41667 5.68333 4.05 7.05C2.68333 8.41667 2 10.0667 2 12C2 13.9333 2.68333 15.5833 4.05 16.95C5.41667 18.3167 7.06667 19 9 19Z"
+                      fill="#7238D5"
                     />
                   </svg>
                   <span className="text-[17.7px] font-semibold leading-5.75 text-[#1C1B1B]">
@@ -280,28 +307,42 @@ export function GuessOutputScreen({
                   </span>
                 </div>
 
-                {/* XP Earned */}
-                <div className="flex flex-col items-center rounded-[10.625px] border border-[#3800801A] bg-[#3800800D] px-[14.17px] pt-[14.17px] pb-[14.17px]">
+                {/* Accuracy */}
+                <div className="relative flex flex-col items-center rounded-[10.625px] border border-[#E5E2E14D] bg-[#F0EDED] px-[14.17px] pt-[14.17px] pb-[14.17px]">
+                  {/* Green overlay */}
+                  <div className="pointer-events-none absolute inset-0 rounded-[10.625px] bg-[#006B5A0D]" />
                   <svg
-                    width="8.85"
-                    height="17.71"
-                    viewBox="0 0 9 18"
+                    width="22"
+                    height="21"
+                    viewBox="0 0 22 21"
                     fill="none"
-                    aria-hidden="true"
-                    className="mb-1"
+                    xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      d="M4.5 0.5C2.567 0.5 1 2.067 1 4V6.5C1 8.433 2.567 10 4.5 10C6.433 10 8 8.433 8 6.5V4C8 2.067 6.433 0.5 4.5 0.5Z"
-                      stroke="#380080"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
+                      d="M7.6 21L5.7 17.8L2.1 17L2.45 13.3L0 10.5L2.45 7.7L2.1 4L5.7 3.2L7.6 0L11 1.45L14.4 0L16.3 3.2L19.9 4L19.55 7.7L22 10.5L19.55 13.3L19.9 17L16.3 17.8L14.4 21L11 19.55L7.6 21ZM9.95 14.05L15.6 8.4L14.2 6.95L9.95 11.2L7.8 9.1L6.4 10.5L9.95 14.05Z"
+                      fill="#006B5A"
                     />
+                  </svg>
+                  <span className="text-[17.7px] font-semibold leading-5.75 text-[#1C1B1B]">
+                    {accuracy}%
+                  </span>
+                  <span className="mt-1 text-[10.625px] font-medium tracking-[0.53px] text-[#4A4454]">
+                    ACCURACY
+                  </span>
+                </div>
+
+                {/* XP Earned — now inside the 3-column grid */}
+                <div className="flex flex-col items-center rounded-[10.625px] border border-[#3800801A] bg-[#3800800D] px-[14.17px] pt-[14.17px] pb-[14.17px]">
+                  <svg
+                    width="10"
+                    height="20"
+                    viewBox="0 0 10 20"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
                     <path
-                      d="M1 11.5C1 13.433 2.567 15 4.5 15C6.433 15 8 13.433 8 11.5"
-                      stroke="#380080"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
+                      d="M0 0H10V7.85C10 8.23333 9.91667 8.575 9.75 8.875C9.58333 9.175 9.35 9.41667 9.05 9.6L5.5 11.7L6.2 14H10L6.9 16.2L8.1 20L5 17.65L1.9 20L3.1 16.2L0 14H3.8L4.5 11.7L0.95 9.6C0.65 9.41667 0.416667 9.175 0.25 8.875C0.0833333 8.575 0 8.23333 0 7.85V0ZM2 2V7.85L4 9.05V2H2ZM8 2H6V9.05L8 7.85V2Z"
+                      fill="#380080"
                     />
                   </svg>
                   <span className="text-[17.7px] font-semibold leading-5.75 text-[#380080]">
@@ -309,55 +350,6 @@ export function GuessOutputScreen({
                   </span>
                   <span className="mt-1 text-[10.625px] font-medium tracking-[0.53px] text-[#4A4454]">
                     XP EARNED
-                  </span>
-                </div>
-
-                {/* Accuracy */}
-                <div className="relative flex flex-col items-center rounded-[10.625px] border border-[#E5E2E14D] bg-[#F0EDED] px-[14.17px] pt-[14.17px] pb-[14.17px]">
-                  {/* Green overlay */}
-                  <div className="pointer-events-none absolute inset-0 rounded-[10.625px] bg-[#006B5A0D]" />
-                  <svg
-                    width="19.48"
-                    height="18.59"
-                    viewBox="0 0 20 19"
-                    fill="none"
-                    aria-hidden="true"
-                    className="mb-1"
-                  >
-                    <path
-                      d="M10 0.5C4.5 0.5 1 3.5 1 9.5C1 15.5 4.5 18.5 10 18.5C15.5 18.5 19 15.5 19 9.5"
-                      stroke="#006B5A"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M19 0.5L10 9.5"
-                      stroke="#006B5A"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M19 0.5L14 0.5"
-                      stroke="#006B5A"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M19 0.5L19 5.5"
-                      stroke="#006B5A"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                  <span className="text-[17.7px] font-semibold leading-5.75 text-[#1C1B1B]">
-                    100%
-                  </span>
-                  <span className="mt-1 text-[10.625px] font-medium tracking-[0.53px] text-[#4A4454]">
-                    ACCURACY
                   </span>
                 </div>
               </div>
@@ -636,8 +628,8 @@ export function GuessOutputScreen({
 
           {/* No buttons inside scrollable area — moved to fixed bottom bar */}
 
-          {/* Inline explanation card — visible on smaller screens (< xl) when answered */}
-          {phase !== 'playing' && (
+          {/* Inline explanation card — visible on smaller screens (< xl) when answered incorrectly */}
+          {phase === 'incorrect' && (
             <div className="mt-6 rounded-2xl border border-[#CCC3D7] bg-white shadow-sm xl:hidden">
               <div className="flex items-center gap-3 bg-[#380080] px-5 py-4">
                 <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20 text-lg">
@@ -698,6 +690,23 @@ export function GuessOutputScreen({
                     <pre className="overflow-x-auto font-mono text-xs leading-5 text-[#DCE2F3]">
                       {questionCode || 'No code snippet available'}
                     </pre>
+                  </div>
+                </div>
+
+                {/* Ask more input */}
+                <div className="rounded-lg border border-[#CCC3D7] px-4 py-2.5">
+                  <div className="flex items-center justify-between">
+                    <input
+                      type="text"
+                      placeholder="Ask more..."
+                      className="flex-1 bg-transparent text-sm leading-4.25 text-[#380080] placeholder-[#380080]/50 outline-none"
+                    />
+                    <button
+                      type="button"
+                      className="flex h-6.5 w-11.75 items-center justify-center rounded-full bg-[#6C63FF] text-sm font-semibold text-white transition-colors hover:bg-[#5B52EE]"
+                    >
+                      &rarr;
+                    </button>
                   </div>
                 </div>
               </div>
@@ -770,6 +779,46 @@ export function GuessOutputScreen({
                     </pre>
                   </div>
                 </div>
+
+                {/* SLICE SYNTAX */}
+                <div>
+                  <p className="mb-1 text-[11px] font-bold uppercase tracking-wider text-[#4A4454]">
+                    Slice Syntax
+                  </p>
+                  <div className="rounded-lg border border-[#CCC3D7] bg-[#F0EDFF] px-4 py-2.5">
+                    <span className="text-sm leading-4.25 text-[#380080]">
+                      list[ start : end : step ]
+                    </span>
+                  </div>
+                </div>
+
+                {/* Ask more input */}
+                <div className="rounded-lg border border-[#CCC3D7] px-4 py-2.5">
+                  <div className="flex items-center justify-between">
+                    <input
+                      type="text"
+                      placeholder="Ask more..."
+                      className="flex-1 bg-transparent text-sm leading-4.25 text-[#380080] placeholder-[#380080]/50 outline-none"
+                    />
+                    <button
+                      type="button"
+                      className="flex h-6.5 w-11.75 items-center justify-center rounded-full bg-[#6C63FF] text-sm font-semibold text-white transition-colors hover:bg-[#5B52EE]"
+                    >
+                      &rarr;
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Primary button at bottom */}
+              <div className="border-t border-[#E5E2E1] px-5 py-5">
+                <button
+                  type="button"
+                  onClick={handleNext}
+                  className="ml-auto flex h-10.75 items-center rounded-xl bg-[#6C63FF] px-6 text-[16px] font-semibold leading-[19.6px] text-white transition-colors hover:bg-[#5B52EE]"
+                >
+                  Claim Rewards & Continue &rarr;
+                </button>
               </div>
             </div>
           </div>

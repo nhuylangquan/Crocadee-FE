@@ -1,10 +1,4 @@
-import {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  type ReactNode,
-} from 'react';
+import { createContext, use, useState, useEffect, type ReactNode } from 'react';
 
 type Theme = 'light' | 'dark';
 
@@ -43,7 +37,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   return <ThemeContext value={{ theme, toggleTheme }}>{children}</ThemeContext>;
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useTheme() {
-  const ctx = useContext(ThemeContext);
+  const ctx = use(ThemeContext);
   return ctx;
 }

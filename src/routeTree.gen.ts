@@ -24,6 +24,9 @@ const IndexLazyRouteImport = createFileRoute('/')()
 const PracticeLabTryItLazyRouteImport = createFileRoute(
   '/practice-lab_/try-it',
 )()
+const CoderushRearrangeSeedLazyRouteImport = createFileRoute(
+  '/coderush/rearrange/$seed',
+)()
 const CoderushGuess_outputSeedLazyRouteImport = createFileRoute(
   '/coderush/guess_output/$seed',
 )()
@@ -84,6 +87,14 @@ const PracticeLabTryItLazyRoute = PracticeLabTryItLazyRouteImport.update({
 } as any).lazy(() =>
   import('./routes/practice-lab_.try-it.lazy').then((d) => d.Route),
 )
+const CoderushRearrangeSeedLazyRoute =
+  CoderushRearrangeSeedLazyRouteImport.update({
+    id: '/rearrange/$seed',
+    path: '/rearrange/$seed',
+    getParentRoute: () => CoderushLazyRoute,
+  } as any).lazy(() =>
+    import('./routes/coderush/rearrange.$seed.lazy').then((d) => d.Route),
+  )
 const CoderushGuess_outputSeedLazyRoute =
   CoderushGuess_outputSeedLazyRouteImport.update({
     id: '/guess_output/$seed',
@@ -105,6 +116,7 @@ export interface FileRoutesByFullPath {
   '/signup': typeof SignupLazyRoute
   '/practice-lab/try-it': typeof PracticeLabTryItLazyRoute
   '/coderush/guess_output/$seed': typeof CoderushGuess_outputSeedLazyRoute
+  '/coderush/rearrange/$seed': typeof CoderushRearrangeSeedLazyRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
@@ -118,6 +130,7 @@ export interface FileRoutesByTo {
   '/signup': typeof SignupLazyRoute
   '/practice-lab/try-it': typeof PracticeLabTryItLazyRoute
   '/coderush/guess_output/$seed': typeof CoderushGuess_outputSeedLazyRoute
+  '/coderush/rearrange/$seed': typeof CoderushRearrangeSeedLazyRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -132,6 +145,7 @@ export interface FileRoutesById {
   '/signup': typeof SignupLazyRoute
   '/practice-lab_/try-it': typeof PracticeLabTryItLazyRoute
   '/coderush/guess_output/$seed': typeof CoderushGuess_outputSeedLazyRoute
+  '/coderush/rearrange/$seed': typeof CoderushRearrangeSeedLazyRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -147,6 +161,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/practice-lab/try-it'
     | '/coderush/guess_output/$seed'
+    | '/coderush/rearrange/$seed'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -160,6 +175,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/practice-lab/try-it'
     | '/coderush/guess_output/$seed'
+    | '/coderush/rearrange/$seed'
   id:
     | '__root__'
     | '/'
@@ -173,6 +189,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/practice-lab_/try-it'
     | '/coderush/guess_output/$seed'
+    | '/coderush/rearrange/$seed'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -260,6 +277,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PracticeLabTryItLazyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/coderush/rearrange/$seed': {
+      id: '/coderush/rearrange/$seed'
+      path: '/rearrange/$seed'
+      fullPath: '/coderush/rearrange/$seed'
+      preLoaderRoute: typeof CoderushRearrangeSeedLazyRouteImport
+      parentRoute: typeof CoderushLazyRoute
+    }
     '/coderush/guess_output/$seed': {
       id: '/coderush/guess_output/$seed'
       path: '/guess_output/$seed'
@@ -272,10 +296,12 @@ declare module '@tanstack/react-router' {
 
 interface CoderushLazyRouteChildren {
   CoderushGuess_outputSeedLazyRoute: typeof CoderushGuess_outputSeedLazyRoute
+  CoderushRearrangeSeedLazyRoute: typeof CoderushRearrangeSeedLazyRoute
 }
 
 const CoderushLazyRouteChildren: CoderushLazyRouteChildren = {
   CoderushGuess_outputSeedLazyRoute: CoderushGuess_outputSeedLazyRoute,
+  CoderushRearrangeSeedLazyRoute: CoderushRearrangeSeedLazyRoute,
 }
 
 const CoderushLazyRouteWithChildren = CoderushLazyRoute._addFileChildren(

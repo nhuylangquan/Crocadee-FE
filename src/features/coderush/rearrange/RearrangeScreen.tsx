@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Button } from '../../../components/ui/Button';
 import { CompletionPopup } from '../../../components/coderush/CompletionPopup';
+import { AiTutorPanel } from '../../../components/coderush/AiTutorPanel';
 import type { RearrangeQuestion } from './rearrangeData';
 import { validateRearrangeAnswer } from './api/rearrangeApi';
 
@@ -30,6 +31,7 @@ export function RearrangeScreen({ questions = [] }: RearrangeScreenProps) {
   const [timeTaken, setTimeTaken] = useState('0:00');
   const [accuracy, setAccuracy] = useState(0);
   const [dragIdx, setDragIdx] = useState<number | null>(null);
+  const [explanation, setExplanation] = useState<string | null>(null);
 
   const totalQuestions = Math.min(questions.length, TOTAL_QUESTIONS);
   const question = questions[currentQ] ?? questions[0];
@@ -122,6 +124,7 @@ export function RearrangeScreen({ questions = [] }: RearrangeScreenProps) {
     setAnsweredCount((c) => c + 1);
     try {
       const result = await validateRearrangeAnswer(question.id, orderedLines);
+      setExplanation(result.ex);
       if (result.correct) {
         const newCombo = combo + 1;
         setCombo(newCombo);
@@ -183,7 +186,7 @@ export function RearrangeScreen({ questions = [] }: RearrangeScreenProps) {
           className={`ml-auto flex h-9 items-center gap-2 rounded-lg border px-3 text-sm leading-4 font-medium ${
             timeLeft <= 5
               ? 'border-danger-100 bg-danger-100 text-danger-500'
-              : 'border-[#CCC3D7] bg-shade-white text-neutral-700'
+              : 'border-neutral-300 dark:border-neutral-600 bg-shade-white text-neutral-700'
           }`}
         >
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -249,7 +252,7 @@ export function RearrangeScreen({ questions = [] }: RearrangeScreenProps) {
               onDragEnd={handleDragEnd}
               className={`flex items-center rounded-[10px] border bg-shade-white transition-all duration-150 ${
                 phase === 'playing'
-                  ? 'cursor-grab border-[#CCC3D7] hover:border-primary-300 hover:bg-[#F8F4FF] active:cursor-grabbing'
+                  ? 'cursor-grab border-neutral-300 dark:border-neutral-600 hover:border-primary-300 hover:bg-primary-100 active:cursor-grabbing'
                   : phase === 'correct'
                     ? 'border-success-500 bg-success-100'
                     : 'border-danger-500 bg-danger-100'
@@ -286,7 +289,7 @@ export function RearrangeScreen({ questions = [] }: RearrangeScreenProps) {
                       moveLine(idx, 'up');
                     }}
                     disabled={idx === 0}
-                    className="flex h-5 w-5 items-center justify-center rounded text-neutral-400 hover:bg-[#EDE9F5] hover:text-primary-900 disabled:opacity-30"
+                    className="flex h-5 w-5 items-center justify-center rounded text-neutral-400 hover:bg-primary-100 hover:text-primary-900 disabled:opacity-30"
                     aria-label="Move up"
                   >
                     <svg
@@ -304,7 +307,7 @@ export function RearrangeScreen({ questions = [] }: RearrangeScreenProps) {
                       moveLine(idx, 'down');
                     }}
                     disabled={idx === orderedLines.length - 1}
-                    className="flex h-5 w-5 items-center justify-center rounded text-neutral-400 hover:bg-[#EDE9F5] hover:text-primary-900 disabled:opacity-30"
+                    className="flex h-5 w-5 items-center justify-center rounded text-neutral-400 hover:bg-primary-100 hover:text-primary-900 disabled:opacity-30"
                     aria-label="Move down"
                   >
                     <svg
@@ -338,29 +341,36 @@ export function RearrangeScreen({ questions = [] }: RearrangeScreenProps) {
           </div>
         )}
 
-        {(phase === 'correct' || phase === 'incorrect') && (
-          <div
-            className={`mt-6 rounded-2xl border bg-shade-white p-6 shadow-sm ${phase === 'correct' ? 'border-success-500' : 'border-danger-500'}`}
-          >
-            <p
-              className={`text-center text-lg font-bold ${phase === 'correct' ? 'text-success-500' : 'text-danger-500'}`}
-            >
-              {phase === 'correct'
-                ? 'Correct! Well done!'
-                : 'Incorrect. Try the next one!'}
+        {/* Result indicator */}
+        {phase === 'correct' && (
+          <div className="mt-6 rounded-2xl border border-success-500 bg-shade-white p-6 shadow-sm">
+            <p className="text-center text-lg font-bold text-success-500">
+              Correct! Well done!
             </p>
+          </div>
+        )}
+
+        {/* AI Tutor panel on incorrect */}
+        {phase === 'incorrect' && explanation && (
+          <div className="mt-6">
+            <AiTutorPanel
+              explanation={explanation}
+              wrongAnswer={orderedLines.join('\n')}
+              correctAnswer={question.lines.join('\n')}
+              questionText={question.q}
+            />
           </div>
         )}
       </div>
 
       {/* Bottom action bar */}
-      <div className="flex shrink-0 items-center justify-end gap-3 border-t border-[#E5E2E1] bg-shade-white px-6 py-3 md:px-71">
+      <div className="flex shrink-0 items-center justify-end gap-3 border-t border-neutral-200 dark:border-neutral-600 bg-shade-white px-6 py-3 md:px-71">
         {phase === 'playing' && (
           <>
             <Button
               variant="choice"
               onClick={handleSkip}
-              className="h-11! w-auto! rounded-[10px] border border-[#CCC3D7] bg-shade-white px-5 py-2.5 text-sm font-medium text-neutral-700 hover:bg-[#F8F4FF]"
+              className="h-11! w-auto! rounded-[10px] border border-neutral-300 dark:border-neutral-600 bg-shade-white px-5 py-2.5 text-sm font-medium text-neutral-700 hover:bg-primary-100"
             >
               Skip {'\u2192'}
             </Button>

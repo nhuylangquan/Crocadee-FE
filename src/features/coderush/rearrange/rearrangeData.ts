@@ -15,6 +15,7 @@ export interface RearrangeQuestion {
  */
 export interface RearrangeValidateResult {
   correct: boolean;
+  ex: string;
 }
 
 /**

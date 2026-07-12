@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Button } from '../../../components/ui/Button';
 import { CompletionPopup } from '../../../components/coderush/CompletionPopup';
+import { AiTutorPanel } from '../../../components/coderush/AiTutorPanel';
 import type { GuessOutputQuestion } from './guessOutputData';
 import { validateGuessOutputAnswer } from './api/guessOutputApi';
 
@@ -162,37 +163,37 @@ export function GuessOutputScreen({ questions = [] }: GuessOutputScreenProps) {
   /* ── Option styling helpers ─────────────────────────── */
   const getOptionClass = (idx: number) => {
     const base =
-      'flex h-[86px] cursor-pointer items-center rounded-[12px] border bg-white px-5 transition-all duration-200 hover:border-primary-300 hover:bg-[#F8F4FF]';
+      'flex h-[86px] cursor-pointer items-center rounded-[12px] border bg-shade-white px-5 transition-all duration-200 hover:border-primary-300 hover:bg-primary-100';
 
     if (phase === 'playing' || phase === 'checking') {
-      return `${base} border-[#CCC3D7] ${
-        selectedIdx === idx ? 'border-primary-300 bg-[#F8F4FF]' : ''
+      return `${base} border-neutral-300 dark:border-neutral-600 ${
+        selectedIdx === idx ? 'border-primary-300 bg-primary-100' : ''
       }`;
     }
 
     if (phase === 'correct' && idx === selectedIdx) {
-      return `${base} border-[#006B5A] bg-[#E6F9F6]`;
+      return `${base} border-success-500 bg-success-100`;
     }
     if (phase === 'incorrect' && idx === selectedIdx) {
-      return `${base} border-[#BA1A1A] bg-[#FFF0F0]`;
+      return `${base} border-danger-500 bg-danger-100`;
     }
-    return `${base} border-[#CCC3D7] opacity-60`;
+    return `${base} border-neutral-300 dark:border-neutral-600 opacity-60`;
   };
 
   const getBadgeClass = (idx: number) => {
     if (phase === 'playing' || phase === 'checking') {
-      return 'bg-[#EDE9F5]';
+      return 'bg-primary-100';
     }
-    if (phase === 'correct' && idx === selectedIdx) return 'bg-[#CCEFE9]';
-    if (phase === 'incorrect' && idx === selectedIdx) return 'bg-[#FFDAD6]';
-    return 'bg-[#EBEBEB]';
+    if (phase === 'correct' && idx === selectedIdx) return 'bg-success-100';
+    if (phase === 'incorrect' && idx === selectedIdx) return 'bg-danger-100';
+    return 'bg-neutral-100';
   };
 
   const getTextClass = (idx: number) => {
-    if (phase === 'playing' || phase === 'checking') return 'text-[#151C27]';
-    if (phase === 'correct' && idx === selectedIdx) return 'text-[#006B5A]';
-    if (phase === 'incorrect' && idx === selectedIdx) return 'text-[#BA1A1A]';
-    return 'text-[#4A4454]';
+    if (phase === 'playing' || phase === 'checking') return 'text-neutral-900';
+    if (phase === 'correct' && idx === selectedIdx) return 'text-success-500';
+    if (phase === 'incorrect' && idx === selectedIdx) return 'text-danger-500';
+    return 'text-neutral-600';
   };
 
   /* ═══════════════════════════════════════════════════════
@@ -214,18 +215,18 @@ export function GuessOutputScreen({ questions = [] }: GuessOutputScreenProps) {
      RENDER: Main Game Screen
      ═══════════════════════════════════════════════════════ */
   return (
-    <div className="flex flex-1 min-h-0 flex-col bg-[#F9F9FF]">
+    <div className="flex flex-1 min-h-0 flex-col bg-bg-default">
       {/* HUD */}
-      <div className="flex h-11 shrink-0 items-center bg-[#EEEAFF] px-6 md:px-71">
-        <span className="text-[13px] leading-4 text-[#4A4454]">
+      <div className="flex h-11 shrink-0 items-center bg-primary-100 px-6 md:px-71">
+        <span className="text-[13px] leading-4 text-neutral-700">
           Guess Output · Logic & Syntax
         </span>
 
         <div
           className={`ml-auto flex h-9 items-center gap-2 rounded-lg border px-3 text-sm leading-4 font-medium ${
             timeLeft <= 5
-              ? 'border-[#FFCDD2] bg-[#FFF0F0] text-[#BA1A1A]'
-              : 'border-[#CCC3D7] bg-white text-[#4A4454]'
+              ? 'border-danger-100 bg-danger-100 text-danger-500'
+              : 'border-neutral-300 dark:border-neutral-600 bg-shade-white text-neutral-700'
           }`}
         >
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -246,7 +247,7 @@ export function GuessOutputScreen({ questions = [] }: GuessOutputScreenProps) {
           <span>{timeLeft}s</span>
         </div>
 
-        <span className="ml-6 text-[13px] leading-4 text-[#4A4454]">
+        <span className="ml-6 text-[13px] leading-4 text-neutral-700">
           Q {currentQ + 1} / {totalQuestions}
         </span>
       </div>
@@ -254,12 +255,12 @@ export function GuessOutputScreen({ questions = [] }: GuessOutputScreenProps) {
       {/* Combo Banner */}
       {phase === 'correct' && combo >= 2 && (
         <div className="flex shrink-0 items-center justify-end px-71 py-2">
-          <div className="flex items-center gap-3 rounded-lg bg-[#E6F9F6] px-6 py-3">
-            <span className="text-lg font-bold text-[#006B5A]">
+          <div className="flex items-center gap-3 rounded-lg bg-tertiary-100 px-6 py-3">
+            <span className="text-lg font-bold text-tertiary-900">
               {'\u{1F525}'} COMBO INCREASED! {'\u00D7'}
               {combo}
             </span>
-            <span className="text-sm text-[#006B5A]">
+            <span className="text-sm text-tertiary-900">
               You're on fire! Keep it going!
             </span>
           </div>
@@ -269,7 +270,7 @@ export function GuessOutputScreen({ questions = [] }: GuessOutputScreenProps) {
       {/* Scrollable content area */}
       <div className="flex min-h-0 flex-1 gap-8 overflow-y-auto px-6 py-6 md:px-71">
         <div className="flex min-w-0 flex-1 flex-col">
-          <h2 className="text-[28px] leading-[1.2] font-extrabold text-[#151C27]">
+          <h2 className="text-[28px] leading-[1.2] font-extrabold text-neutral-900">
             {questionHeading}
           </h2>
 
@@ -284,7 +285,7 @@ export function GuessOutputScreen({ questions = [] }: GuessOutputScreenProps) {
             </pre>
           </div>
 
-          <p className="mt-5 text-[14px] font-medium text-[#4A4454]">
+          <p className="mt-5 text-[14px] font-medium text-neutral-700">
             Select the correct answer:
           </p>
 
@@ -313,15 +314,17 @@ export function GuessOutputScreen({ questions = [] }: GuessOutputScreenProps) {
                   </span>
 
                   {phase === 'checking' && selectedIdx === idx && (
-                    <span className="ml-auto text-sm text-[#7238D5]">...</span>
+                    <span className="ml-auto text-sm text-primary-500">
+                      ...
+                    </span>
                   )}
                   {phase === 'correct' && idx === selectedIdx && (
-                    <span className="ml-auto text-lg font-bold text-[#006B5A]">
+                    <span className="ml-auto text-lg font-bold text-success-500">
                       {'\u2713'}
                     </span>
                   )}
                   {phase === 'incorrect' && idx === selectedIdx && (
-                    <span className="ml-auto text-lg font-bold text-[#BA1A1A]">
+                    <span className="ml-auto text-lg font-bold text-danger-500">
                       {'\u2717'}
                     </span>
                   )}
@@ -330,135 +333,52 @@ export function GuessOutputScreen({ questions = [] }: GuessOutputScreenProps) {
             })}
           </div>
 
-          {/* Explanation card on smaller screens — only on incorrect */}
+          {/* AI Tutor panel on smaller screens — only on incorrect */}
           {phase === 'incorrect' && explanation && (
-            <div className="mt-6 rounded-2xl border border-[#CCC3D7] bg-white shadow-sm xl:hidden">
-              <div className="flex items-center gap-3 bg-[#380080] px-5 py-4">
-                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20 text-lg">
-                  {'\u{1F916}'}
-                </span>
-                <span className="text-base font-semibold text-white">
-                  AI Tutor
-                </span>
-              </div>
-              <div className="space-y-5 p-5">
-                {selectedIdx !== null && (
-                  <div>
-                    <p className="mb-1 text-[11px] font-bold uppercase tracking-wider text-[#4A4454]">
-                      Your Answer
-                    </p>
-                    <div className="flex items-center gap-3 rounded-lg border border-[#BA1A1A] bg-[#FFF0F0] px-4 py-2.5">
-                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-[#FFDAD6] text-sm font-bold text-[#BA1A1A]">
-                        {OPTION_LABELS[selectedIdx]}
-                      </span>
-                      <span className="text-sm font-medium text-[#BA1A1A]">
-                        {Object.values(question.o)[selectedIdx]}
-                      </span>
-                      <span className="ml-auto text-[#BA1A1A]">{'\u2717'}</span>
-                    </div>
-                  </div>
-                )}
-                <div>
-                  <p className="mb-1 text-[11px] font-bold uppercase tracking-wider text-[#4A4454]">
-                    Explanation
-                  </p>
-                  <div className="rounded-[10px] bg-[#F6F3F2] p-4 text-sm leading-6 text-[#4A4454]">
-                    {explanation}
-                  </div>
-                </div>
-                {/* Ask more input */}
-                <div className="rounded-lg border border-[#CCC3D7] px-4 py-2.5">
-                  <div className="flex items-center justify-between">
-                    <input
-                      type="text"
-                      placeholder="Ask more..."
-                      className="flex-1 bg-transparent text-sm leading-4.25 text-[#380080] placeholder-[#380080]/50 outline-none"
-                    />
-                    <button
-                      type="button"
-                      className="flex h-6.5 w-11.75 items-center justify-center rounded-full bg-[#6C63FF] text-sm font-semibold text-white transition-colors hover:bg-[#5B52EE]"
-                    >
-                      &rarr;
-                    </button>
-                  </div>
-                </div>
-              </div>
+            <div className="mt-6 xl:hidden">
+              <AiTutorPanel
+                explanation={explanation}
+                wrongAnswer={
+                  selectedIdx !== null
+                    ? `${OPTION_LABELS[selectedIdx]}: ${Object.values(question.o)[selectedIdx]}`
+                    : 'Skipped'
+                }
+                correctAnswer={questionCode || questionHeading}
+                questionText={questionHeading}
+              />
             </div>
           )}
         </div>
 
-        {/* AI Tutor side panel — on xl+, only on incorrect */}
+        {/* AI Tutor panel — on xl+, only on incorrect */}
         {phase === 'incorrect' && explanation && (
           <div className="hidden w-110 shrink-0 xl:block">
-            <div className="sticky top-0 overflow-hidden rounded-2xl border border-[#CCC3D7] bg-white shadow-sm">
-              <div className="flex items-center gap-3 bg-[#380080] px-5 py-4">
-                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20 text-lg">
-                  {'\u{1F916}'}
-                </span>
-                <span className="text-base font-semibold text-white">
-                  AI Tutor
-                </span>
-              </div>
-              <div className="space-y-5 p-5">
-                {selectedIdx !== null && (
-                  <div>
-                    <p className="mb-1 text-[11px] font-bold uppercase tracking-wider text-[#4A4454]">
-                      Your Answer
-                    </p>
-                    <div className="flex items-center gap-3 rounded-lg border border-[#BA1A1A] bg-[#FFF0F0] px-4 py-2.5">
-                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-[#FFDAD6] text-sm font-bold text-[#BA1A1A]">
-                        {OPTION_LABELS[selectedIdx]}
-                      </span>
-                      <span className="text-sm font-medium text-[#BA1A1A]">
-                        {Object.values(question.o)[selectedIdx]}
-                      </span>
-                      <span className="ml-auto text-[#BA1A1A]">{'\u2717'}</span>
-                    </div>
-                  </div>
-                )}
-                <div>
-                  <p className="mb-1 text-[11px] font-bold uppercase tracking-wider text-[#4A4454]">
-                    Explanation
-                  </p>
-                  <div className="rounded-[10px] bg-[#F6F3F2] p-4 text-sm leading-6 text-[#4A4454]">
-                    {explanation}
-                  </div>
-                </div>
-
-                {/* Ask more input */}
-                <div className="rounded-lg border border-[#CCC3D7] px-4 py-2.5">
-                  <div className="flex items-center justify-between">
-                    <input
-                      type="text"
-                      placeholder="Ask more..."
-                      className="flex-1 bg-transparent text-sm leading-4.25 text-[#380080] placeholder-[#380080]/50 outline-none"
-                    />
-                    <button
-                      type="button"
-                      className="flex h-6.5 w-11.75 items-center justify-center rounded-full bg-[#6C63FF] text-sm font-semibold text-white transition-colors hover:bg-[#5B52EE]"
-                    >
-                      &rarr;
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <AiTutorPanel
+              explanation={explanation}
+              wrongAnswer={
+                selectedIdx !== null
+                  ? `${OPTION_LABELS[selectedIdx]}: ${Object.values(question.o)[selectedIdx]}`
+                  : 'Skipped'
+              }
+              correctAnswer={questionCode || questionHeading}
+              questionText={questionHeading}
+            />
           </div>
         )}
       </div>
 
       {/* Fixed bottom action bar */}
-      <div className="flex shrink-0 items-center justify-end gap-3 border-t border-[#E5E2E1] bg-white px-6 py-3 md:px-71">
+      <div className="flex shrink-0 items-center justify-end gap-3 border-t border-neutral-200 dark:border-neutral-600 bg-shade-white px-6 py-3 md:px-71">
         {phase === 'playing' ? (
           <Button
             variant="choice"
             onClick={handleSkip}
-            className="h-11! w-auto! rounded-[10px] border border-[#CCC3D7] bg-white px-5 py-2.5 text-sm font-medium text-[#4A4454] hover:bg-[#F8F4FF]"
+            className="h-11! w-auto! rounded-[10px] border border-neutral-300 dark:border-neutral-600 bg-shade-white px-5 py-2.5 text-sm font-medium text-neutral-700 hover:bg-primary-100"
           >
             Skip {'\u2192'}
           </Button>
         ) : phase === 'checking' ? (
-          <span className="text-sm text-[#4A4454]">Checking...</span>
+          <span className="text-sm text-neutral-700">Checking...</span>
         ) : (
           <Button
             variant="primary"

@@ -29,7 +29,7 @@ export function CompletionPopup({
         <div className="pointer-events-none fixed inset-0 bg-[#1C1B1B]/46" />
 
         {/* Modal */}
-        <div className="relative z-10 mx-auto w-full max-w-148.75 overflow-y-auto rounded-[14px] border border-[#E5E2E180] bg-shade-white shadow-lg max-h-[calc(100vh-80px)]">
+        <div className="relative z-10 mx-auto w-full max-w-148.75 overflow-y-auto rounded-[14px] border border-neutral-200/50 bg-shade-white shadow-lg max-h-[calc(100vh-80px)]">
           {/* Close button */}
           <button
             type="button"
@@ -110,7 +110,7 @@ export function CompletionPopup({
             {/* Main Stats Grid (3 columns) */}
             <div className="mt-[28.33px] grid grid-cols-3 gap-3">
               {/* Time Taken */}
-              <div className="flex flex-col items-center rounded-[10.625px] border border-[#E5E2E14D] bg-neutral-100 px-[14.17px] pt-[14.17px] pb-[14.17px]">
+              <div className="flex flex-col items-center rounded-[10.625px] border border-neutral-200/30 bg-neutral-100 px-[14.17px] pt-[14.17px] pb-[14.17px]">
                 <svg
                   width="18"
                   height="21"
@@ -132,7 +132,7 @@ export function CompletionPopup({
               </div>
 
               {/* Accuracy */}
-              <div className="relative flex flex-col items-center rounded-[10.625px] border border-[#E5E2E14D] bg-neutral-100 px-[14.17px] pt-[14.17px] pb-[14.17px]">
+              <div className="relative flex flex-col items-center rounded-[10.625px] border border-neutral-200/30 bg-neutral-100 px-[14.17px] pt-[14.17px] pb-[14.17px]">
                 <svg
                   width="22"
                   height="21"
@@ -154,7 +154,7 @@ export function CompletionPopup({
               </div>
 
               {/* XP Earned */}
-              <div className="flex flex-col items-center rounded-[10.625px] border border-[#E5E2E14D] bg-neutral-100 px-[14.17px] pt-[14.17px] pb-[14.17px]">
+              <div className="flex flex-col items-center rounded-[10.625px] border border-neutral-200/30 bg-neutral-100 px-[14.17px] pt-[14.17px] pb-[14.17px]">
                 <svg
                   width="10"
                   height="20"
@@ -186,7 +186,7 @@ export function CompletionPopup({
                   2,450 / 3,000 XP
                 </span>
               </div>
-              <div className="mt-2.5 h-[10.63px] w-full overflow-hidden rounded-full bg-[#E5E2E1]">
+              <div className="mt-2.5 h-[10.63px] w-full overflow-hidden rounded-full bg-neutral-100">
                 <div
                   className="h-full rounded-full"
                   style={{
@@ -199,7 +199,7 @@ export function CompletionPopup({
             </div>
 
             {/* Bonus Breakdown */}
-            <div className="mt-5 rounded-[10.625px] border border-[#E5E2E180] bg-neutral-100 px-[17.7px] py-[17.7px]">
+            <div className="mt-5 rounded-[10.625px] border border-neutral-200/50 bg-neutral-100 px-[17.7px] py-[17.7px]">
               <span className="text-[12.4px] font-semibold leading-[17.7px] tracking-[0.62px] text-neutral-700">
                 REWARD BREAKDOWN
               </span>
@@ -282,11 +282,11 @@ export function CompletionPopup({
           </div>
 
           {/* Footer Actions */}
-          <div className="flex items-center justify-between border-t border-[#E5E2E1] px-[21.25px] py-[21.25px]">
+          <div className="flex items-center justify-between border-t border-neutral-200 px-[21.25px] py-[21.25px]">
             <button
               type="button"
               onClick={handleBackToHub}
-              className="flex h-[49.58px] items-center gap-2 rounded-[7.08px] border border-[#CCC3D7] bg-shade-white px-5 text-[12.4px] font-semibold leading-[17.35px] text-neutral-900 transition-colors hover:bg-[#F8F4FF]"
+              className="flex h-[49.58px] items-center gap-2 rounded-[7.08px] border border-neutral-300 bg-shade-white px-5 text-[12.4px] font-semibold leading-[17.35px] text-neutral-900 transition-colors hover:bg-primary-100"
             >
               <svg
                 width="13.28"

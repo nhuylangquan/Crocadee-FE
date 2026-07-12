@@ -3,15 +3,11 @@ import { EditorHeader } from '../components/EditorHeader';
 import { CodeEditorPanel } from '../components/CodeEditorPanel';
 import { OutputPanel } from '../components/OutputPanel';
 
-interface PistonResponse {
-  compile?: {
-    code: number;
-    output: string;
-  };
-  run?: {
-    code: number;
-    output: string;
-  };
+interface SandboxResponse {
+  success: boolean;
+  output: string;
+  error?: string;
+  compilationError?: string;
 }
 
 const defaultCode = `#include <iostream>
@@ -33,29 +29,33 @@ export function TryItYourselfPage() {
     setOutput('Compiling and running...');
 
     try {
-      const response = await fetch('https://emkc.org/api/v2/piston/execute', {
+      const response = await fetch('http://localhost:3000/sandbox/execute', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           language: 'cpp',
-          version: '10.2.0',
-          files: [
-            {
-              name: 'main.cpp',
-              content: code,
-            },
-          ],
+          code: code,
         }),
       });
 
-      const data = (await response.json()) as PistonResponse;
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${String(response.status)}`);
+      }
 
-      if (data.compile && data.compile.code !== 0) {
-        setOutput(data.compile.output);
+      const data = (await response.json()) as SandboxResponse;
+
+      if (!data.success) {
+        if (data.compilationError) {
+          setOutput(`Compilation Error:\n${data.compilationError}`);
+        } else {
+          setOutput(
+            `Execution Error:\n${data.error ?? 'Unknown error'}\n\nOutput:\n${data.output}`
+          );
+        }
       } else {
-        setOutput(data.run?.output ?? 'Program exited with no output.');
+        setOutput(data.output || 'Program exited with no output.');
       }
     } catch (error) {
       setOutput('Error: Could not connect to the execution server.');

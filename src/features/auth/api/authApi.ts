@@ -77,3 +77,14 @@ export function getAuthErrorMessage(
 function isApiErrorBody(data: unknown): data is ApiErrorBody {
   return typeof data === 'object' && data !== null && 'message' in data;
 }
+
+export async function forgotPassword(email: string): Promise<void> {
+  return apiClient.post('/auth/forgot-password', { email });
+}
+
+export async function resetPassword(payload: {
+  token: string;
+  newPassword: string;
+}): Promise<void> {
+  return apiClient.post('/auth/reset-password', payload);
+}

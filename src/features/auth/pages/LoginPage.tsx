@@ -141,12 +141,12 @@ export function LoginPage() {
             />
             Remember me
           </label>
-          <a
-            href="#forgot-password"
+          <Link
+            to="/forgot-password"
             className="text-primary-700 hover:text-primary-900"
           >
             Forgot Password?
-          </a>
+          </Link>
         </div>
 
         {submitError ? (

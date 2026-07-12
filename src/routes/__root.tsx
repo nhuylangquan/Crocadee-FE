@@ -3,6 +3,7 @@ import {
   Outlet,
   useRouterState,
 } from '@tanstack/react-router';
+import { useState } from 'react';
 import { TopNavbar } from '../components/layout/TopNavbar';
 
 export const Route = createRootRoute({
@@ -14,11 +15,18 @@ function RootComponent() {
     select: (state) => state.location.pathname,
   });
 
-  const noNavbarRoutes = ['/login', '/signup', '/practice-lab/try-it'];
+  const noNavbarRoutes = [
+    '/login',
+    '/signup',
+    '/practice-lab/try-it',
+    '/forgot-password',
+    '/reset-password',
+  ];
   const shouldShowNavbar = !noNavbarRoutes.includes(pathname);
 
-  const authUserString =
-    localStorage.getItem('authUser') ?? sessionStorage.getItem('authUser');
+  const [authUserString] = useState<string | null>(
+    () => localStorage.getItem('authUser') ?? sessionStorage.getItem('authUser')
+  );
 
   let isLoggedIn = false;
   let username = '';

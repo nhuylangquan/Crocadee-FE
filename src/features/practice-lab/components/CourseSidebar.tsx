@@ -1,25 +1,22 @@
-type TopicStatus = 'done' | 'current' | 'locked';
+import type { LessonData } from '../data/lessonData';
 
-interface Topic {
-  id: string;
-  name: string;
-  status: TopicStatus;
-  module: number;
+interface CourseSidebarProps {
+  lessons: LessonData[];
+  currentLessonId: string;
+  onSelectLesson: (id: string) => void;
 }
 
-const topics: Topic[] = [
-  { id: 'intro', name: 'Introduction to C++', status: 'current', module: 1 },
-  { id: 'basics', name: 'C++ Basics', status: 'locked', module: 2 },
-  { id: 'variable', name: 'Variable', status: 'locked', module: 3 },
-  { id: 'condition', name: 'Condition', status: 'locked', module: 4 },
-  { id: 'loop', name: 'Loop', status: 'locked', module: 5 },
-  { id: 'function', name: 'Function', status: 'locked', module: 6 },
-  { id: 'array', name: 'Array', status: 'locked', module: 7 },
-  { id: 'pointer', name: 'Pointer', status: 'locked', module: 8 },
-];
-
-export function CourseSidebar() {
-  const progress = 1;
+export function CourseSidebar({
+  lessons,
+  currentLessonId,
+  onSelectLesson,
+}: CourseSidebarProps) {
+  // Compute progress based on selected lesson index
+  const currentIndex = lessons.findIndex((t) => t.lessonId === currentLessonId);
+  const progress = Math.max(
+    1,
+    Math.round(((currentIndex + 1) / (lessons.length || 1)) * 100)
+  );
 
   return (
     <aside className="flex h-full w-65 shrink-0 flex-col border-r border-neutral-100 bg-shade-white px-5 py-6 shadow-sm">
@@ -48,11 +45,16 @@ export function CourseSidebar() {
 
       {/* Topic List */}
       <nav className="flex flex-col gap-2">
-        {topics.map((topic) => {
-          if (topic.status === 'current') {
+        {lessons.map((topic) => {
+          const isCurrent = topic.lessonId === currentLessonId;
+          const isPast =
+            lessons.findIndex((t) => t.lessonId === topic.lessonId) <
+            currentIndex;
+
+          if (isCurrent) {
             return (
               <div
-                key={topic.id}
+                key={topic.lessonId}
                 className="flex gap-3 rounded-xl border-l-2 border-[#6C63FF] bg-[#EBE7FF] p-3 text-left transition-all"
               >
                 <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#6C63FF]">
@@ -63,7 +65,7 @@ export function CourseSidebar() {
                     Module {topic.module}
                   </span>
                   <span className="text-[13px] font-bold text-[#6C63FF]">
-                    {topic.name}
+                    {topic.title}
                   </span>
                 </div>
               </div>
@@ -72,18 +74,39 @@ export function CourseSidebar() {
 
           return (
             <button
-              key={topic.id}
+              key={topic.lessonId}
               type="button"
-              disabled
-              className="flex items-center gap-4 rounded-xl px-3 py-2.5 text-left opacity-60 transition-all"
+              onClick={() => {
+                onSelectLesson(topic.lessonId);
+              }}
+              className={`flex items-center gap-4 rounded-xl px-3 py-2.5 text-left transition-all hover:bg-neutral-50 ${isPast ? '' : 'opacity-60'}`}
             >
-              <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-neutral-300 bg-shade-white">
-                <span className="text-xs font-medium text-neutral-400">
-                  {topic.module}
-                </span>
+              <div
+                className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full border ${isPast ? 'border-[#6C63FF] bg-[#6C63FF] text-white' : 'border-neutral-300 bg-white'}`}
+              >
+                {isPast ? (
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                ) : (
+                  <span className="text-xs font-medium text-neutral-400">
+                    {topic.module}
+                  </span>
+                )}
               </div>
-              <span className="text-[13px] font-medium text-neutral-500">
-                {topic.name}
+              <span
+                className={`text-[13px] font-medium ${isPast ? 'text-neutral-900' : 'text-neutral-500'}`}
+              >
+                {topic.title}
               </span>
             </button>
           );

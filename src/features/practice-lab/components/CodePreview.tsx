@@ -1,5 +1,4 @@
 import fileIconUrl from '../../../assets/icons/practice-file.svg';
-import tryIconUrl from '../../../assets/icons/practice-try.svg';
 
 export function CodePreview() {
   return (
@@ -68,10 +67,11 @@ export function CodePreview() {
           </div>
           <a
             href="/practice-lab/try-it"
-            className="inline-flex items-center gap-1.5 rounded-full bg-[#00D09E] px-5 py-2 text-sm font-bold text-white transition-all hover:bg-[#00b085] active:scale-[0.97]"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 rounded-full bg-[#3B82F6] px-5 py-2 text-sm font-bold text-white transition-all hover:bg-[#2563EB] active:scale-[0.97]"
           >
-            Try it
-            <img src={tryIconUrl} alt="" className="h-3.5 w-3.5" />
+            Try it Yourself »
           </a>
         </div>
       </div>

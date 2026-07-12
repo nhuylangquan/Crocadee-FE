@@ -14,9 +14,11 @@ import { Route as rootRouteImport } from './routes/__root';
 import { Route as ProfileRouteImport } from './routes/profile';
 
 const SignupLazyRouteImport = createFileRoute('/signup')();
+const ResetPasswordLazyRouteImport = createFileRoute('/reset-password')();
 const PracticeLabLazyRouteImport = createFileRoute('/practice-lab')();
 const LoginLazyRouteImport = createFileRoute('/login')();
 const HomeLazyRouteImport = createFileRoute('/home')();
+const ForgotPasswordLazyRouteImport = createFileRoute('/forgot-password')();
 const CoderushLazyRouteImport = createFileRoute('/coderush')();
 const IndexLazyRouteImport = createFileRoute('/')();
 const PracticeLabTryItLazyRouteImport = createFileRoute(
@@ -34,6 +36,13 @@ const SignupLazyRoute = SignupLazyRouteImport.update({
   path: '/signup',
   getParentRoute: () => rootRouteImport,
 } as any).lazy(() => import('./routes/signup.lazy').then((d) => d.Route));
+const ResetPasswordLazyRoute = ResetPasswordLazyRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any).lazy(() =>
+  import('./routes/reset-password.lazy').then((d) => d.Route)
+);
 const PracticeLabLazyRoute = PracticeLabLazyRouteImport.update({
   id: '/practice-lab',
   path: '/practice-lab',
@@ -49,6 +58,13 @@ const HomeLazyRoute = HomeLazyRouteImport.update({
   path: '/home',
   getParentRoute: () => rootRouteImport,
 } as any).lazy(() => import('./routes/home.lazy').then((d) => d.Route));
+const ForgotPasswordLazyRoute = ForgotPasswordLazyRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => rootRouteImport,
+} as any).lazy(() =>
+  import('./routes/forgot-password.lazy').then((d) => d.Route)
+);
 const CoderushLazyRoute = CoderushLazyRouteImport.update({
   id: '/coderush',
   path: '/coderush',
@@ -92,9 +108,11 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute;
   '/profile': typeof ProfileRoute;
   '/coderush': typeof CoderushLazyRouteWithChildren;
+  '/forgot-password': typeof ForgotPasswordLazyRoute;
   '/home': typeof HomeLazyRoute;
   '/login': typeof LoginLazyRoute;
   '/practice-lab': typeof PracticeLabLazyRoute;
+  '/reset-password': typeof ResetPasswordLazyRoute;
   '/signup': typeof SignupLazyRoute;
   '/practice-lab/try-it': typeof PracticeLabTryItLazyRoute;
   '/coderush/guess_output/$seed': typeof CoderushGuess_outputSeedLazyRoute;
@@ -104,9 +122,11 @@ export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute;
   '/profile': typeof ProfileRoute;
   '/coderush': typeof CoderushLazyRouteWithChildren;
+  '/forgot-password': typeof ForgotPasswordLazyRoute;
   '/home': typeof HomeLazyRoute;
   '/login': typeof LoginLazyRoute;
   '/practice-lab': typeof PracticeLabLazyRoute;
+  '/reset-password': typeof ResetPasswordLazyRoute;
   '/signup': typeof SignupLazyRoute;
   '/practice-lab/try-it': typeof PracticeLabTryItLazyRoute;
   '/coderush/guess_output/$seed': typeof CoderushGuess_outputSeedLazyRoute;
@@ -117,9 +137,11 @@ export interface FileRoutesById {
   '/': typeof IndexLazyRoute;
   '/profile': typeof ProfileRoute;
   '/coderush': typeof CoderushLazyRouteWithChildren;
+  '/forgot-password': typeof ForgotPasswordLazyRoute;
   '/home': typeof HomeLazyRoute;
   '/login': typeof LoginLazyRoute;
   '/practice-lab': typeof PracticeLabLazyRoute;
+  '/reset-password': typeof ResetPasswordLazyRoute;
   '/signup': typeof SignupLazyRoute;
   '/practice-lab_/try-it': typeof PracticeLabTryItLazyRoute;
   '/coderush/guess_output/$seed': typeof CoderushGuess_outputSeedLazyRoute;
@@ -131,9 +153,11 @@ export interface FileRouteTypes {
     | '/'
     | '/profile'
     | '/coderush'
+    | '/forgot-password'
     | '/home'
     | '/login'
     | '/practice-lab'
+    | '/reset-password'
     | '/signup'
     | '/practice-lab/try-it'
     | '/coderush/guess_output/$seed'
@@ -143,9 +167,11 @@ export interface FileRouteTypes {
     | '/'
     | '/profile'
     | '/coderush'
+    | '/forgot-password'
     | '/home'
     | '/login'
     | '/practice-lab'
+    | '/reset-password'
     | '/signup'
     | '/practice-lab/try-it'
     | '/coderush/guess_output/$seed'
@@ -155,9 +181,11 @@ export interface FileRouteTypes {
     | '/'
     | '/profile'
     | '/coderush'
+    | '/forgot-password'
     | '/home'
     | '/login'
     | '/practice-lab'
+    | '/reset-password'
     | '/signup'
     | '/practice-lab_/try-it'
     | '/coderush/guess_output/$seed'
@@ -168,9 +196,11 @@ export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute;
   ProfileRoute: typeof ProfileRoute;
   CoderushLazyRoute: typeof CoderushLazyRouteWithChildren;
+  ForgotPasswordLazyRoute: typeof ForgotPasswordLazyRoute;
   HomeLazyRoute: typeof HomeLazyRoute;
   LoginLazyRoute: typeof LoginLazyRoute;
   PracticeLabLazyRoute: typeof PracticeLabLazyRoute;
+  ResetPasswordLazyRoute: typeof ResetPasswordLazyRoute;
   SignupLazyRoute: typeof SignupLazyRoute;
   PracticeLabTryItLazyRoute: typeof PracticeLabTryItLazyRoute;
 }
@@ -182,6 +212,13 @@ declare module '@tanstack/react-router' {
       path: '/signup';
       fullPath: '/signup';
       preLoaderRoute: typeof SignupLazyRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    '/reset-password': {
+      id: '/reset-password';
+      path: '/reset-password';
+      fullPath: '/reset-password';
+      preLoaderRoute: typeof ResetPasswordLazyRouteImport;
       parentRoute: typeof rootRouteImport;
     };
     '/practice-lab': {
@@ -203,6 +240,13 @@ declare module '@tanstack/react-router' {
       path: '/home';
       fullPath: '/home';
       preLoaderRoute: typeof HomeLazyRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    '/forgot-password': {
+      id: '/forgot-password';
+      path: '/forgot-password';
+      fullPath: '/forgot-password';
+      preLoaderRoute: typeof ForgotPasswordLazyRouteImport;
       parentRoute: typeof rootRouteImport;
     };
     '/coderush': {
@@ -268,9 +312,11 @@ const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
   ProfileRoute: ProfileRoute,
   CoderushLazyRoute: CoderushLazyRouteWithChildren,
+  ForgotPasswordLazyRoute: ForgotPasswordLazyRoute,
   HomeLazyRoute: HomeLazyRoute,
   LoginLazyRoute: LoginLazyRoute,
   PracticeLabLazyRoute: PracticeLabLazyRoute,
+  ResetPasswordLazyRoute: ResetPasswordLazyRoute,
   SignupLazyRoute: SignupLazyRoute,
   PracticeLabTryItLazyRoute: PracticeLabTryItLazyRoute,
 };

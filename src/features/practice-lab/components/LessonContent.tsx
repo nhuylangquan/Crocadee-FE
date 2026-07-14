@@ -38,6 +38,7 @@ export function LessonContent({
         {/* Description */}
         <div
           className="mb-10 text-[15px] leading-[1.8] text-neutral-600 prose prose-neutral max-w-none"
+          // eslint-disable-next-line react-dom/no-dangerously-set-innerhtml
           dangerouslySetInnerHTML={{ __html: data.description }}
         />
 
@@ -69,7 +70,7 @@ export function LessonContent({
 
         {/* Code Preview */}
         <div className="mb-10">
-          <CodePreview />
+          <CodePreview lesson={data} />
         </div>
 
         {/* Navigation */}

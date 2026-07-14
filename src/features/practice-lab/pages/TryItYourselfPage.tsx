@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { EditorHeader } from '../components/EditorHeader';
 import { CodeEditorPanel } from '../components/CodeEditorPanel';
 import { OutputPanel } from '../components/OutputPanel';
+import { AIDebugPanel } from '../components/AIDebugPanel';
 
 interface SandboxResponse {
   success: boolean;
@@ -15,12 +16,43 @@ const defaultCode = `#include <iostream>
 int main() {
     std::cout << "Hello World!" << std::endl;
     return 0;
-}`;
+}
+`;
 
 export function TryItYourselfPage() {
   const [code, setCode] = useState(defaultCode);
   const [output, setOutput] = useState('Click "Run" to execute the code.');
+
+  const queryParams = new URLSearchParams(window.location.search);
+  const lessonId = queryParams.get('lessonId');
+
+  useEffect(() => {
+    if (!lessonId) return;
+
+    const fetchLessonCode = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:3000/lessons/${lessonId}`
+        );
+        if (response.ok) {
+          const data = (await response.json()) as { code?: string };
+          if (data.code) {
+            setCode(data.code);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching lesson code:', error);
+      }
+    };
+
+    void fetchLessonCode();
+  }, [lessonId]);
   const [isRunning, setIsRunning] = useState(false);
+
+  const [activeTab, setActiveTab] = useState<'output' | 'debug'>('output');
+
+  const [errorMessage, setErrorMessage] = useState('');
+  const [debugRequestId, setDebugRequestId] = useState(0);
 
   const handleRun = async () => {
     if (!code.trim()) return;
@@ -36,7 +68,7 @@ export function TryItYourselfPage() {
         },
         body: JSON.stringify({
           language: 'cpp',
-          code: code,
+          code,
         }),
       });
 
@@ -47,27 +79,51 @@ export function TryItYourselfPage() {
       const data = (await response.json()) as SandboxResponse;
 
       if (!data.success) {
+        const detectedError =
+          data.compilationError ?? data.error ?? 'Unknown execution error';
+
+        setErrorMessage(detectedError);
+        setActiveTab('debug');
+        setDebugRequestId((prev) => prev + 1);
+
         if (data.compilationError) {
           setOutput(`Compilation Error:\n${data.compilationError}`);
         } else {
           setOutput(
-            `Execution Error:\n${data.error ?? 'Unknown error'}\n\nOutput:\n${data.output}`
+            `Execution Error:\n${detectedError}\n\nOutput:\n${data.output}`
           );
         }
       } else {
+        setErrorMessage('');
+        setActiveTab('output');
         setOutput(data.output || 'Program exited with no output.');
       }
     } catch (error) {
-      setOutput('Error: Could not connect to the execution server.');
-      console.error(error);
+      const message =
+        error instanceof Error ? error.message : 'Unexpected error occurred';
+
+      setOutput(message);
+      setErrorMessage(message);
+      setActiveTab('debug');
+      setDebugRequestId((prev) => prev + 1);
     } finally {
       setIsRunning(false);
     }
   };
 
   const handleSave = () => {
-    // In production, this would save the code to the backend
     console.log('Code saved:', code);
+  };
+
+  const handleExit = () => {
+    if (window.history.length > 1) {
+      window.close();
+      setTimeout(() => {
+        window.location.href = '/practice-lab';
+      }, 100);
+    } else {
+      window.location.href = '/practice-lab';
+    }
   };
 
   const handleClear = () => {
@@ -76,30 +132,67 @@ export function TryItYourselfPage() {
 
   return (
     <div className="flex h-full flex-col bg-[#1E1E2E]">
-      {/* Custom Header */}
       <EditorHeader
         onRun={() => {
           void handleRun();
         }}
         onSave={handleSave}
+        onExit={handleExit}
         isRunning={isRunning}
       />
 
-      {/* Editor + Output Split */}
       <div className="flex min-h-0 flex-1">
-        {/* Code Editor (Left) */}
         <div className="flex-1 border-r border-white/10">
           <CodeEditorPanel
             code={code}
-            onChange={(v) => {
-              setCode(v ?? '');
+            onChange={(value) => {
+              setCode(value ?? '');
             }}
           />
         </div>
 
-        {/* Output Panel (Right) */}
-        <div className="flex-1">
-          <OutputPanel output={output} onClear={handleClear} />
+        <div className="flex flex-1 flex-col">
+          <div className="flex border-b border-white/10 bg-[#25233B]">
+            <button
+              type="button"
+              onClick={() => {
+                setActiveTab('output');
+              }}
+              className={`px-5 py-3 text-sm font-semibold ${
+                activeTab === 'output'
+                  ? 'border-b-2 border-[#6C63FF] text-white'
+                  : 'text-white/60'
+              }`}
+            >
+              Output
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setActiveTab('debug');
+              }}
+              className={`px-5 py-3 text-sm font-semibold ${
+                activeTab === 'debug'
+                  ? 'border-b-2 border-[#6C63FF] text-white'
+                  : 'text-white/60'
+              }`}
+            >
+              🤖 Debug
+            </button>
+          </div>
+
+          <div className="min-h-0 flex-1">
+            {activeTab === 'output' ? (
+              <OutputPanel output={output} onClear={handleClear} />
+            ) : (
+              <AIDebugPanel
+                code={code}
+                errorMessage={errorMessage}
+                requestId={debugRequestId}
+              />
+            )}
+          </div>
         </div>
       </div>
     </div>

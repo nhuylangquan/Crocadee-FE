@@ -3,6 +3,7 @@ import axios from 'axios';
 import { CourseSidebar } from '../components/CourseSidebar';
 import { LessonContent } from '../components/LessonContent';
 import type { LessonData } from '../data/lessonData';
+import { AIChatBubble } from '../components/AIChatBubble';
 
 export function PracticeLabPage() {
   const [currentLessonId, setCurrentLessonId] = useState('intro');
@@ -24,33 +25,35 @@ export function PracticeLabPage() {
     void fetchLessons();
   }, []);
 
+  const currentLesson = lessons.find(
+    (lesson) => lesson.lessonId === currentLessonId
+  );
+
   if (loading) {
     return (
       <div className="flex h-full w-full items-center justify-center bg-[#F7F6FF]">
-        <div className="text-[#6C63FF] font-bold">Loading lessons...</div>
+        <div className="font-bold text-[#6C63FF]">Loading lessons...</div>
       </div>
     );
   }
 
   return (
     <div className="flex h-full w-full bg-bg-default">
-      {/* Left Sidebar */}
       <CourseSidebar
         lessons={lessons}
         currentLessonId={currentLessonId}
         onSelectLesson={setCurrentLessonId}
       />
 
-      {/* Main Content Area */}
       <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
         <LessonContent
           lessons={lessons}
           lessonId={currentLessonId}
-          onNextLesson={(nextId) => {
-            setCurrentLessonId(nextId);
-          }}
+          onNextLesson={setCurrentLessonId}
         />
       </div>
+
+      <AIChatBubble lessonTitle={currentLesson?.title} />
     </div>
   );
 }

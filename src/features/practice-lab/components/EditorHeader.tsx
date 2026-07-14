@@ -4,10 +4,16 @@ import playIconUrl from '../../../assets/icons/practice-play.svg';
 interface EditorHeaderProps {
   onRun?: () => void;
   onSave?: () => void;
+  onExit?: () => void;
   isRunning?: boolean;
 }
 
-export function EditorHeader({ onRun, onSave, isRunning }: EditorHeaderProps) {
+export function EditorHeader({
+  onRun,
+  onSave,
+  onExit,
+  isRunning,
+}: EditorHeaderProps) {
   return (
     <header className="flex h-12 shrink-0 items-center justify-between bg-[#2D1F5E] px-4">
       {/* Left: Logo + Title */}
@@ -47,6 +53,13 @@ export function EditorHeader({ onRun, onSave, isRunning }: EditorHeaderProps) {
           className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg bg-white/10 px-4 py-1.5 text-sm font-medium text-white transition-all hover:bg-white/20 active:scale-[0.97]"
         >
           Save
+        </button>
+        <button
+          type="button"
+          onClick={onExit}
+          className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg bg-[#FF4B4B] hover:bg-[#E03A3A] px-4 py-1.5 text-sm font-bold text-white transition-all active:scale-[0.97]"
+        >
+          Thoát
         </button>
       </div>
     </header>

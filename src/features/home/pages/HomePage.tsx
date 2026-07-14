@@ -13,32 +13,6 @@ import leaderboardIcon from '../../../assets/icons/home-leaderboard.svg';
 import robotIcon from '../../../assets/icons/home-robot.svg';
 
 /* ==========================================================================
-   1. SUB-COMPONENT: RESUME BANNER
-   ========================================================================== */
-interface ResumeBannerProps {
-  resumeLesson: DashboardData['resumeLesson'];
-}
-function ResumeBanner({ resumeLesson }: ResumeBannerProps) {
-  return (
-    <div className="mb-4 flex flex-col items-center justify-between gap-4 rounded-2xl border border-neutral-200 bg-shade-white px-6 py-4 shadow-sm md:flex-row">
-      <p className="text-[16px] font-medium leading-relaxed text-neutral-900">
-        You've finish your{' '}
-        <span className="font-bold">{resumeLesson.lastCompleted}</span> lessons,
-        and currently learning how{' '}
-        <span className="font-bold">{resumeLesson.currentlyLearning}</span>{' '}
-        work.
-      </p>
-      <div className="flex items-center gap-3">
-        <Button className="px-5 py-2.5 text-sm">Resume session</Button>
-        <Button variant="secondary" className="px-5 py-2.5 text-sm">
-          To Challenge
-        </Button>
-      </div>
-    </div>
-  );
-}
-
-/* ==========================================================================
    2. SUB-COMPONENT: LEARNING ROADMAP
    ========================================================================== */
 interface LearningRoadmapProps {
@@ -311,6 +285,21 @@ export function HomePage() {
     void fetchHomeData();
   }, []);
 
+  const [username] = useState(() => {
+    const authUserString =
+      localStorage.getItem('authUser') ?? sessionStorage.getItem('authUser');
+    let name = 'Alex Nguyen';
+    if (authUserString) {
+      try {
+        const authUser = JSON.parse(authUserString) as { username: string };
+        if (authUser.username) name = authUser.username;
+      } catch (error) {
+        console.error('Lỗi parse authUser:', error);
+      }
+    }
+    return name;
+  });
+
   if (isLoading || !data) {
     return (
       <div className="flex min-h-[calc(100vh-56px)] items-center justify-center bg-bg-default">
@@ -320,19 +309,19 @@ export function HomePage() {
   }
 
   return (
-    <div className="h-[calc(100vh-56px)] bg-bg-default overflow-hidden">
-      <div className="mx-auto flex h-full max-w-300 flex-col p-4 font-sans text-neutral-900">
-        <div className="shrink-0">
-          <ResumeBanner resumeLesson={data.resumeLesson} />
-        </div>
+    <div className="h-[calc(100vh-56px)] bg-bg-default overflow-y-auto">
+      <div className="mx-auto flex max-w-5xl flex-col p-6 font-sans text-neutral-900">
+        <h1 className="text-3xl font-bold text-center mt-2 mb-8 text-neutral-900">
+          Welcome back, {username}
+        </h1>
 
-        <div className="flex min-h-0 flex-1 flex-col gap-4">
-          <div className="grid flex-1 grid-cols-1 gap-4 lg:grid-cols-3">
+        <div className="flex flex-col gap-6">
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
             <LearningRoadmap roadmap={data.roadmap} />
             <DailyQuests dailyQuests={data.dailyQuests} />
           </div>
 
-          <div className="grid flex-1 grid-cols-1 gap-4 md:grid-cols-3">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
             <AiTargetedReview aiReview={data.aiReview} />
             <WeeklyLeaderboard leaderboard={data.leaderboard} />
             <DailyStreak streak={data.streak} />

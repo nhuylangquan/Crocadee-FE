@@ -16,4 +16,7 @@ export interface LessonData {
   nextLessonName?: string;
   prevLessonId?: string;
   prevLessonName?: string;
+  code?: string;
+  codeFilename?: string;
+  output?: string;
 }

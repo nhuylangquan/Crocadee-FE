@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { apiClient } from '../../../lib/axios';
 import { CourseSidebar } from '../components/CourseSidebar';
 import { LessonContent } from '../components/LessonContent';
 import type { LessonData } from '../data/lessonData';
@@ -13,7 +13,7 @@ export function PracticeLabPage() {
   useEffect(() => {
     const fetchLessons = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/lessons');
+        const response = await apiClient.get('/lessons');
         setLessons(response.data as LessonData[]);
       } catch (error) {
         console.error('Error fetching lessons:', error);

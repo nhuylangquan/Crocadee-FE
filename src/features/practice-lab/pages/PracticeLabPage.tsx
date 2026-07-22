@@ -13,10 +13,22 @@ export function PracticeLabPage() {
   useEffect(() => {
     const fetchLessons = async () => {
       try {
-        const response = await apiClient.get('/lessons');
-        setLessons(response.data as LessonData[]);
+        const response: unknown = await apiClient.get('/lessons');
+        let lessonList: LessonData[] = [];
+        if (Array.isArray(response)) {
+          lessonList = response as LessonData[];
+        } else if (
+          response &&
+          typeof response === 'object' &&
+          'data' in response &&
+          Array.isArray((response as { data: unknown }).data)
+        ) {
+          lessonList = (response as { data: LessonData[] }).data;
+        }
+        setLessons(lessonList);
       } catch (error) {
         console.error('Error fetching lessons:', error);
+        setLessons([]);
       } finally {
         setLoading(false);
       }
@@ -25,9 +37,9 @@ export function PracticeLabPage() {
     void fetchLessons();
   }, []);
 
-  const currentLesson = lessons.find(
-    (lesson) => lesson.lessonId === currentLessonId
-  );
+  const currentLesson = Array.isArray(lessons)
+    ? lessons.find((lesson) => lesson.lessonId === currentLessonId)
+    : undefined;
 
   if (loading) {
     return (

@@ -12,15 +12,22 @@ export async function askAiStream(
   const controller = new AbortController();
 
   try {
-    const response = await fetch(
-      `${apiClient.defaults.baseURL ?? 'http://localhost:3000'}/ask_ai`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message }),
-        signal: controller.signal,
-      }
-    );
+    const token =
+      localStorage.getItem('token') ?? sessionStorage.getItem('token');
+    const baseUrl =
+      (import.meta.env.VITE_API_URL as string | undefined) ??
+      apiClient.defaults.baseURL ??
+      'http://localhost:3000';
+
+    const response = await fetch(`${baseUrl}/ask_ai`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: JSON.stringify({ message }),
+      signal: controller.signal,
+    });
 
     if (!response.ok) {
       onError(`Server error: ${String(response.status)}`);

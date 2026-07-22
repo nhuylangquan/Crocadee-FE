@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { apiClient } from '../../../lib/axios';
 import { EditorHeader } from '../components/EditorHeader';
 import { CodeEditorPanel } from '../components/CodeEditorPanel';
 import { OutputPanel } from '../components/OutputPanel';
@@ -31,14 +32,15 @@ export function TryItYourselfPage() {
 
     const fetchLessonCode = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:3000/lessons/${lessonId}`
-        );
-        if (response.ok) {
-          const data = (await response.json()) as { code?: string };
-          if (data.code) {
-            setCode(data.code);
-          }
+        const res: unknown = await apiClient.get(`/lessons/${lessonId}`);
+        const data = (
+          res && typeof res === 'object' && 'data' in res
+            ? (res as { data: { code?: string } }).data
+            : res
+        ) as { code?: string } | null | undefined;
+
+        if (data?.code) {
+          setCode(data.code);
         }
       } catch (error) {
         console.error('Error fetching lesson code:', error);
@@ -61,36 +63,26 @@ export function TryItYourselfPage() {
     setOutput('Compiling and running...');
 
     try {
-      const response = await fetch('http://localhost:3000/sandbox/execute', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          language: 'cpp',
-          code,
-        }),
+      const res: unknown = await apiClient.post('/sandbox/execute', {
+        language: 'cpp',
+        code,
       });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${String(response.status)}`);
-      }
+      const data = res as SandboxResponse | null | undefined;
 
-      const data = (await response.json()) as SandboxResponse;
-
-      if (!data.success) {
+      if (!data?.success) {
         const detectedError =
-          data.compilationError ?? data.error ?? 'Unknown execution error';
+          data?.compilationError ?? data?.error ?? 'Unknown execution error';
 
         setErrorMessage(detectedError);
         setActiveTab('debug');
         setDebugRequestId((prev) => prev + 1);
 
-        if (data.compilationError) {
+        if (data?.compilationError) {
           setOutput(`Compilation Error:\n${data.compilationError}`);
         } else {
           setOutput(
-            `Execution Error:\n${detectedError}\n\nOutput:\n${data.output}`
+            `Execution Error:\n${detectedError}\n\nOutput:\n${data?.output ?? ''}`
           );
         }
       } else {
